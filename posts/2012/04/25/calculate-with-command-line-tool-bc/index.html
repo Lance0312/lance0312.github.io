@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         
-        <title>bash wrapping 位置錯誤</title>
+        <title>Calculate with command-line tool bc</title>
         <meta charset="utf-8" />
                 <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
                                                 <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
@@ -65,37 +65,28 @@
 
             <header>
               <h2 class="entry-title">
-                <a href="http://blog.lance.tw/bash-wrapping-wei-zhi-cuo-wu.html" rel="bookmark"
-                   title="Permalink to bash wrapping 位置錯誤">bash wrapping 位置錯誤</a></h2>
+                <a href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="bookmark"
+                   title="Permalink to Calculate with command-line tool bc">Calculate with command-line tool bc</a></h2>
                       
             </header>
             <footer class="post-info">
-              <abbr class="published" title="2011-12-07T10:41:00">
-                Wed 07 December 2011
+              <abbr class="published" title="2012-04-25T23:57:00">
+                Wed 25 April 2012
               </abbr>
                             <address class="vcard author">
                 By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a>
               </address>
                           </footer><!-- /.post-info -->
             <div class="entry-content">
-              <p>在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$COLUMNS</span>
+              <p>Basic usage</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;expr&#39;</span> | bc
 </pre></div>
 
 
-<p>來查看目前terminal的寬度(字元數)</p>
-<p>bash藉由這個變數來決定哪個位置該wrap，改變terminal大小時，通常這個值也會跟著改
-變，但有時候就會有靈異現象，造成terminal大小改變，但COLUMNS的值卻沒有改變</p>
-<p>bash的一個built-in command shopt，或許可以解決這個問題，shopt中有一個選項
-checkwinsize，會在每次做完一個指令後檢查terminal的大小，並視情況更新LINES &amp;
-COLUMNS，可以把他加在 ~/.bashrc 裡面</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">shopt</span> -s checkwinsize
+<p>Hex to Dec</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;ibase=16;obase=A;FF&#39;</span> | bc
+255
 </pre></div>
-
-
-<p>至於效果如何，需要再觀察看看囉</p>
-<p>Reference:<br />
-<a href="http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin">Bash Reference Manual</a></p>
             </div><!-- /.entry-content -->
             
 
@@ -119,12 +110,12 @@ COLUMNS，可以把他加在 ~/.bashrc 裡面</p>
 <h4>Tags</h4>
 	<ul>
 		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
-		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
-		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
 		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
 	</ul>
 
 
