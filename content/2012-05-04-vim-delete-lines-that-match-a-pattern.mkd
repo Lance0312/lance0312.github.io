@@ -1,0 +1,15 @@
+Title: Vim: Delete lines that match a pattern
+Date: 2012-05-04 11:43
+Category: Posts
+Tags: Vim
+
+Delete lines that match the pattern
+
+    :g/pattern/d  
+
+Delete lines that do not match the pattern
+
+    :v/pattern/d  
+    or  
+    :g!/pattern/d  
+

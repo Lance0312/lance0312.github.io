@@ -1,0 +1,15 @@
+Title: Calculate with command-line tool bc
+Date: 2012-04-25 23:57
+Category: Posts
+Tags: Cli
+
+Basic usage
+```bash
+$ echo 'expr' | bc
+```
+  
+Hex to Dec
+```bash
+$ echo 'ibase=16;obase=A;FF' | bc
+255
+```
