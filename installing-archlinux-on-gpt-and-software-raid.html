@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>Installing Archlinux on GPT and Software RAID</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
+                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="http://blog.lance.tw/installing-archlinux-on-gpt-and-software-raid.html" rel="bookmark"
+                   title="Permalink to Installing Archlinux on GPT and Software RAID">Installing Archlinux on GPT and Software RAID</a></h2>
+                      
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2012-08-31T14:54:00">
+                Fri 31 August 2012
+              </abbr>
+                            <address class="vcard author">
+                By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a>
+              </address>
+                          </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p>昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...</p>
+<p>在官方<a href="http://www.archlinux.org/news/install-media-20120715-released/">捨棄AIF(the Arch Installation Framework)</a>，並以<a href="http://www.archlinux.org/news/install-media-20120804-available/">GRUB2取代GRUB legacy</a>後，
+安裝流程對我們所需的環境變得友善多了。</p>
+<hr />
+<p>Installation media: <a href="http://linux.cs.nctu.edu.tw/archlinux/iso/2012.08.04/archlinux-2012.08.04-dual.iso">archlinux-2012.08.04-dual.iso</a></p>
+<h2>Preparing disk</h2>
+<h3>Create partition table</h3>
+<p>因為要用GPT scheme，所以使用gdisk來切partition table，依照個人喜好，你也可以選
+擇parted。因為gdisk是interactive的操作模式，所以這邊不細講分割流程，只列出幾個
+要點</p>
+<ol>
+<li>使用<code>o</code>產生空的GPT</li>
+<li>2MB的partition for GRUB，type code為<code>ef02</code>(BIOS boot partition)</li>
+<li><code>/boot</code>, <code>/</code>, <code>/tmp</code>的partition作raid，type code要設為<code>fd00</code>(Linux RAID)</li>
+<li>把partition table apply到另一顆硬碟上，使用sgdisk或者gdisk的backup功能</li>
+</ol>
+<p>到此，應該會有類似這樣的partition table</p>
+<div class="highlight"><pre><span class="nv">$ </span>sgdisk -p /dev/sda
+Number  Start <span class="o">(</span>sector<span class="o">)</span>    End <span class="o">(</span>sector<span class="o">)</span>  Size       Code  Name
+   1            2048            6143   2.0 MiB     EF02  BIOS boot partition
+   2            6144          268287   128.0 MiB   FD00  Linux RAID
+   3          268288         2365439   1024.0 MiB  8200  Linux swap
+   4         2365440        17045503   7.0 GiB     FD00  Linux RAID
+   5        17045504        20971486   1.9 GiB     FD00  Linux RAID
+</pre></div>
+
+
+<h3>Create mdadm array</h3>
+<p>接下來，用mdadm建立array</p>
+<div class="highlight"><pre><span class="nv">$ </span>mdadm --create /dev/md2 --level<span class="o">=</span>1 --metadata<span class="o">=</span>0.90 --raid-devices<span class="o">=</span>2 /dev/sda2 /dev/sdb2
+<span class="nv">$ </span>mdadm --create /dev/md4 --level<span class="o">=</span>1 --metadata<span class="o">=</span>0.90 --raid-devices<span class="o">=</span>2 /dev/sda4 /dev/sdb4
+<span class="nv">$ </span>mdadm --create /dev/md5 --level<span class="o">=</span>0 --raid-devices<span class="o">=</span>2 /dev/sda5 /dev/sdb5
+<span class="c"># 查看array的狀態</span>
+<span class="nv">$ </span>cat /proc/mdstat
+</pre></div>
+
+
+<h3>Format partitions</h3>
+<p><code>/boot</code>使用ext2，<code>/</code>使用xfs，<code>/tmp</code>則使用ext4</p>
+<div class="highlight"><pre><span class="nv">$ </span>mkfs.ext2 /dev/md2
+<span class="nv">$ </span>mkfs.xfs /dev/md4
+<span class="nv">$ </span>mkfs.ext4 /dev/md5
+<span class="nv">$ </span>mkswap /dev/sda3
+<span class="nv">$ </span>swapon /dev/sda3
+<span class="nv">$ </span>mkswap /dev/sdb3
+<span class="nv">$ </span>swapon /dev/sdb3
+</pre></div>
+
+
+<h3>Mount partitions</h3>
+<div class="highlight"><pre><span class="nv">$ </span>mount /dev/md4 /mnt
+<span class="c"># 把切成獨立partition的部份也mount上去</span>
+<span class="nv">$ </span>mkdir /mnt/boot
+<span class="nv">$ </span>mkdir /mnt/tmp
+<span class="nv">$ </span>mount /dev/md2 /mnt/boot
+<span class="nv">$ </span>mount /dev/md5 /mnt/tmp
+</pre></div>
+
+
+<h2>Installation</h2>
+<p>首先，修改/etc/pacman.d/mirrorlist，留下linux.cs.nctu.edu.tw就好</p>
+<h3>Base system</h3>
+<div class="highlight"><pre><span class="nv">$ </span>pacstrap /mnt base base-devel
+<span class="c"># genfstab會把有mount進/mnt的partition都一並列出</span>
+<span class="nv">$ </span>genfstab -p /mnt &gt;&gt; /mnt/etc/fstab
+<span class="nv">$ </span>mdadm --detail --scan &gt;&gt; /mnt/etc/mdadm.conf
+</pre></div>
+
+
+<h3>Chroot</h3>
+<div class="highlight"><pre><span class="c"># 以往需要先手動mount上dev, sys, proc，arch-chroot都幫你作好了</span>
+<span class="nv">$ </span>arch-chroot /mnt
+</pre></div>
+
+
+<h3>Configuration</h3>
+<p>基本的設定請參照</p>
+<ol>
+<li><a href="https://wiki.archlinux.org/index.php/Beginners'_Guide#Configure_the_base_system">Configure the base system</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Beginners'_Guide#Configure_the_network">Configure the network</a></li>
+</ol>
+<h3>Create an initial ramdisk environment</h3>
+<p>修改/etc/mkinitcpio.conf，在<code>HOOKS</code>中加入<code>mdadm</code>，並在<code>MODULES</code>中加入<code>raid1</code>，
+接著產生initial ramdisk</p>
+<div class="highlight"><pre><span class="nv">$ </span>mkinitcpio -p linux
+</pre></div>
+
+
+<h3>Bootloader</h3>
+<p>我們選擇GRUB for BIOS motherboard</p>
+<div class="highlight"><pre><span class="nv">$ </span>pacman -S grub-bios
+<span class="c"># 分別裝在兩顆硬碟上</span>
+<span class="nv">$ </span>grub-install --target<span class="o">=</span>i386-pc --recheck /dev/sda
+<span class="nv">$ </span>grub-install --target<span class="o">=</span>i386-pc --recheck /dev/sdb
+</pre></div>
+
+
+<p>為了要讓GRUB認的懂RAID，修改/etc/default/grub，在<code>GRUB_PRELOAD_MODULES</code>中加入<code>raid</code>
+，接著產生grub.cfg</p>
+<div class="highlight"><pre><span class="nv">$ </span>grub-mkconfig -o /boot/grub/grub.cfg
+</pre></div>
+
+
+<p>到這邊大致就完成了，設定一下root password，然後退出chroot環境，並重開</p>
+<hr />
+<h3>Reference</h3>
+<ol>
+<li><a href="https://wiki.archlinux.org/index.php/Beginners'_Guide">Arch wiki - Beginners' Guide</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GPT">Arch wiki - GPT</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Mkinitcpio#Using_RAID">Arch wiki - Mkinitcpio</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/GRUB2#RAID">Arch wiki - GRUB2</a></li>
+</ol>
+            </div><!-- /.entry-content -->
+            
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>Git stash how to</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
+                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="http://blog.lance.tw/git-stash-how-to.html" rel="bookmark"
+                   title="Permalink to Git stash how to">Git stash how to</a></h2>
+                      
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2012-05-04T17:33:00">
+                Fri 04 May 2012
+              </abbr>
+                            <address class="vcard author">
+                By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a>
+              </address>
+                          </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p>故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
+整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
+commit時，我想到我還有台laptop...</p>
+<p>laptop和pc的環境很不一樣，設定檔相對的也會有不少差別，所以我應該要開兩個branch，
+一個放laptop的設定，一個放pc的設定，生性懶惰使然，我不想重作一次工作，也不想把
+完成的部份commit到master branch上，於是<code>git stash</code>就派上用場了，看一下man page
+怎麼說：</p>
+<div class="highlight"><pre><span class="nv">$ </span>man git stash
+...
+DESCRIPTION
+Use git stash when you want to record the current state of the working directory and the index,
+but want to go back to a clean working directory...
+...
+</pre></div>
+
+
+<p>以下是我的流程：</p>
+<div class="highlight"><pre><span class="c"># do something...</span>
+<span class="nv">$ </span>git add . <span class="c"># 將目前的變更加入stage</span>
+<span class="nv">$ </span>git stash <span class="c"># stage的狀態會被存起來，並將working directory reset</span>
+<span class="nv">$ </span>git checkout -b newbranch <span class="c"># 產生一個新的branch並checkout</span>
+<span class="nv">$ </span>git stash pop <span class="c"># 將存起來的stage狀態pop出來</span>
+</pre></div>
+
+
+<p>man page裡面提供了另外兩種情境可以參考</p>
+<h3>Pulling into a dirty tree</h3>
+<p>upstream有了更新，但跟你的local changes有conflict，導致無法直接用<code>git pull</code>解決</p>
+<div class="highlight"><pre><span class="nv">$ </span>git stash
+<span class="nv">$ </span>git pull
+<span class="nv">$ </span>git stash pop
+</pre></div>
+
+
+<h3>Interrupted workflow</h3>
+<p>你老闆要你馬上修正某個問題，但你正在做些偉大的事，一個方法是，先把目前的工作
+commit到一個臨時的branch上，等到問題解決了，在soft reset回來，用<code>git stash</code>可以
+大大簡化這步驟</p>
+<div class="highlight"><pre><span class="c"># changing the world...</span>
+<span class="nv">$ </span>git stash
+<span class="c"># fix something...</span>
+<span class="nv">$ </span>git commit -a -m <span class="s2">&quot;Stupid bug fixed.&quot;</span>
+<span class="nv">$ </span>git stash pop
+<span class="c"># continue on changing the world...</span>
+</pre></div>
+
+
+<p><code>git stash pop</code>有可能會遇到conflict的狀況，哪天遇到了再回來補充...</p>
+            </div><!-- /.entry-content -->
+            
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>

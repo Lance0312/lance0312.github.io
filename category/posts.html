@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>Lance's blog</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
+                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content">
+<h2>Articles in the Posts category</h2>
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+		         <ol id="post-list">
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/installing-archlinux-on-gpt-and-software-raid.html" rel="bookmark" title="Permalink to Installing Archlinux on GPT and Software RAID">Installing Archlinux on GPT and Software RAID</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-31T14:54:00"> Fri 31 August 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...</p>
+<p>在官方<a href="http://www.archlinux.org/news/install-media-20120715-released/">捨棄AIF(the Arch Installation Framework)</a>，並以<a href="http://www.archlinux.org/news/install-media-20120804-available/">GRUB2取代GRUB legacy</a>後，
+安裝流程對我們所需的環境變得友善多了。</p>
+<hr />
+<p>Installation media: <a href="http://linux.cs.nctu.edu.tw/archlinux/iso/2012.08.04/archlinux-2012.08.04-dual.iso">archlinux-2012.08.04-dual.iso</a></p>
+<h2>Preparing disk</h2>
+<h3>Create partition table</h3>
+<p>因為要用GPT scheme，所以使用gdisk來切partition table，依照個人喜好，你也可以選
+擇parted。因為gdisk是interactive的操作模式，所以這邊不細講分割流程，只列出幾個
+要點</p>
+<ol>
+<li>使用<code>o</code>產生空的GPT</li>
+<li>2MB的partition for GRUB，type code為<code>ef02</code>(BIOS boot partition)</li>
+<li><code>/boot</code>, <code>/</code>, <code>/tmp ...</code></li></ol> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/installing-archlinux-on-gpt-and-software-raid.html" rel="bookmark" title="Permalink to Installing Archlinux on GPT and Software RAID">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Manually Install FreeBSD 9.0 Release on GPT and Gmirror</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-22T17:50:00"> Wed 22 August 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>新學期、新組別、新測試機</p>
+<p>FreeBSD branch: <a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso">FreeBSD 9.0 Release</a></p>
+<h2>準備安裝環境</h2>
+<p>依照你的環境，把installation media開起來，第一個畫面應該會像這樣
+<img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /></p>
+<p>因為標題寫"manually"，所以選擇<strong>Shell</strong>，接下來一切就靠自己了</p>
+<h2>Preparing disk</h2>
+<p>我們使用GPT(<a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table</a>) scheme，GPT相較於MBR有以下兩個好處，</p>
+<ol>
+<li>可使用於大於2TB的硬碟</li>
+<li>不再受限於四個Primary partitions</li>
+</ol>
+<h3>Create partition table</h3>
+<div class="highlight"><pre><span class="c"># 查看有沒有存在的partition table，應該要是空白的</span>
+<span class="nv">$ </span>gpart show
+
+<span class="c"># 產生gpt scheme</span>
+<span class="nv">$ </span>gpart create -s gpt da0
+<span class="nv">$ </span>gpart create -s gpt da1 ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/git-smart-http-with-ldap-auth.html" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Git: Smart Http with LDAP Auth</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-04T02:28:00"> Sat 04 August 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
+svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...</p>
+<h2>How To</h2>
+<p>以下是一個基本的virtual host設定，</p>
+<div class="gist">
+    <script src='https://gist.github.com/3250315.js'></script>
+    <noscript>
+        <pre><code><VirtualHost *:80>
+    ServerName your.domain.name
+    DocumentRoot /srv/http
+
+    setEnv GIT_PROJECT_ROOT /opt/git
+    setEnv GIT_HTTP_EXPORT_ALL
+    scriptAlias /git/ /usr/lib/git-core/git-http-backend/
+
+    <Directory />
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    <LocationMatch "/git/">
+        AuthName "GIT"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthzLDAPAuthoritative off
+        AuthLDAPURL "ldaps://your.ldap.server/ou ...</locationmatch></virtualhost></code></pre></noscript></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/git-smart-http-with-ldap-auth.html" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/git.html">Git</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">FreeBSD: Updating Gettext Breaks Vim and Svn</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-07-27T02:12:00"> Fri 27 July 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>在一台FreeBSD 8.0-RELEASE上把<code>git</code>跟<code>gitolite</code>裝起來後，發現<code>vim</code>跟<code>svn</code>壞掉，</p>
+<div class="highlight"><pre><span class="nv">$ </span>vim
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;vim&quot;</span>
+<span class="nv">$ </span>svn
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;svn&quot;</span>
+</pre></div>
+
+
+<p>google後發現，因為<code>gettext</code>升級後，把<code>/usr/local/lib ...</code></p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/git-stash-how-to.html" rel="bookmark" title="Permalink to Git stash how to">Git stash how to</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-05-04T17:33:00"> Fri 04 May 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
+整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
+commit時，我想到我還有台laptop...</p>
+<p>laptop和pc的環境很不一樣，設定檔相對的也會有不少差別，所以我應該要開兩個branch，
+一個放laptop的設定，一個放pc的設定，生性懶惰使然，我不想重作一次工作，也不想把
+完成的部份commit到master branch上，於是<code>git stash</code>就派上用場了，看一下man page
+怎麼說：</p>
+<div class="highlight"><pre><span class="nv">$ </span>man git stash
+...
+DESCRIPTION
+Use git stash when you want to record the current state of the working directory and the index,
+but want ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/git-stash-how-to.html" rel="bookmark" title="Permalink to Git stash how to">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/git.html">Git</a>
+																											</div>
+
+
+
+				        </article></li>
+								</ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+        Page 1 / 2
+            <a href="http://blog.lance.tw/category/posts2.html"><i class="icon-arrow-right"></i></a>
+    </p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>

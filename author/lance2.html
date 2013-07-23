@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>Lance's blog - Articles by Lance</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content">
+<h2>Articles by Lance</h2>
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+		         <ol id="post-list">
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/installing-archlinux-on-gpt-and-software-raid.html" rel="bookmark" title="Permalink to Installing Archlinux on GPT and Software RAID">Installing Archlinux on GPT and Software RAID</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-31T14:54:00"> Fri 31 August 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...</p>
+<p>在官方<a href="http://www.archlinux.org/news/install-media-20120715-released/">捨棄AIF(the Arch Installation Framework)</a>，並以<a href="http://www.archlinux.org/news/install-media-20120804-available/">GRUB2取代GRUB legacy</a>後，
+安裝流程對我們所需的環境變得友善多了。</p>
+<hr />
+<p>Installation media: <a href="http://linux.cs.nctu.edu.tw/archlinux/iso/2012.08.04/archlinux-2012.08.04-dual.iso">archlinux-2012.08.04-dual.iso</a></p>
+<h2>Preparing disk</h2>
+<h3>Create partition table</h3>
+<p>因為要用GPT scheme，所以使用gdisk來切partition table，依照個人喜好，你也可以選
+擇parted。因為gdisk是interactive的操作模式，所以這邊不細講分割流程，只列出幾個
+要點</p>
+<ol>
+<li>使用<code>o</code>產生空的GPT</li>
+<li>2MB的partition for GRUB，type code為<code>ef02</code>(BIOS boot partition)</li>
+<li><code>/boot</code>, <code>/</code>, <code>/tmp ...</code></li></ol> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/installing-archlinux-on-gpt-and-software-raid.html" rel="bookmark" title="Permalink to Installing Archlinux on GPT and Software RAID">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Manually Install FreeBSD 9.0 Release on GPT and Gmirror</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-22T17:50:00"> Wed 22 August 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>新學期、新組別、新測試機</p>
+<p>FreeBSD branch: <a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso">FreeBSD 9.0 Release</a></p>
+<h2>準備安裝環境</h2>
+<p>依照你的環境，把installation media開起來，第一個畫面應該會像這樣
+<img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /></p>
+<p>因為標題寫"manually"，所以選擇<strong>Shell</strong>，接下來一切就靠自己了</p>
+<h2>Preparing disk</h2>
+<p>我們使用GPT(<a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table</a>) scheme，GPT相較於MBR有以下兩個好處，</p>
+<ol>
+<li>可使用於大於2TB的硬碟</li>
+<li>不再受限於四個Primary partitions</li>
+</ol>
+<h3>Create partition table</h3>
+<div class="highlight"><pre><span class="c"># 查看有沒有存在的partition table，應該要是空白的</span>
+<span class="nv">$ </span>gpart show
+
+<span class="c"># 產生gpt scheme</span>
+<span class="nv">$ </span>gpart create -s gpt da0
+<span class="nv">$ </span>gpart create -s gpt da1 ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/python-list-assigningcopying.html" rel="bookmark" title="Permalink to Python: list assigning(copying)">Python: list assigning(copying)</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2011-12-17T11:49:00"> Sat 17 December 2011 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
+<span class="go">[10,2,3,4,5]</span>
+</pre></div>
+
+
+<p>在python中，list的assign有點類似c的pointer，改變b的值同時也會改變a的值，要作到
+真正的copy有兩種方法：</p>
+<h3>slicing</h3>
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:]</span>
+</pre></div>
+
+
+<p>這個作法雖然簡單，但是在nested的結構中會有問題，可以改採用第二種方法</p>
+<h3>module copy</h3>
+<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+
+
+<p>module copy中又有copy與deepcopy，兩者的差別要再研究研究</p>
+<p>Reference:<br />
+<a href="http://docs.python.org/library/copy.html">python module copy</a></p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/python-list-assigningcopying.html" rel="bookmark" title="Permalink to Python: list assigning(copying)">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/python.html">Python</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/vim-delete-lines-that-match-a-pattern.html" rel="bookmark" title="Permalink to Vim: Delete lines that match a pattern">Vim: Delete lines that match a pattern</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-05-04T11:43:00"> Fri 04 May 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>Delete lines that match the pattern</p>
+<div class="highlight"><pre><span class="o">:</span><span class="n">g</span><span class="o">/</span><span class="n">pattern</span><span class="o">/</span><span class="n">d</span>
+</pre></div>
+
+
+<p>Delete lines that do not match the pattern</p>
+<div class="highlight"><pre><span class="o">:</span><span class="n">v</span><span class="o">/</span><span class="n">pattern</span><span class="o">/</span><span class="n">d</span>  
+<span class="n">or</span>  
+<span class="o">:</span><span class="n">g</span><span class="o">!/</span><span class="n">pattern</span><span class="o">/</span><span class="n">d</span>
+</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/vim-delete-lines-that-match-a-pattern.html" rel="bookmark" title="Permalink to Vim: Delete lines that match a pattern">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/vim.html">Vim</a>
+																											</div>
+
+
+
+				        </article></li>
+								</ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+                        <a href="http://blog.lance.tw/author/lance.html"><i class="icon-arrow-left"></i></a>
+                Page 2 / 2
+    </p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>

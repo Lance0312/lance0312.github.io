@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>FreeBSD: Updating Gettext Breaks Vim and Svn</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
+                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="bookmark"
+                   title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">FreeBSD: Updating Gettext Breaks Vim and Svn</a></h2>
+                      
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2012-07-27T02:12:00">
+                Fri 27 July 2012
+              </abbr>
+                            <address class="vcard author">
+                By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a>
+              </address>
+                          </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p>在一台FreeBSD 8.0-RELEASE上把<code>git</code>跟<code>gitolite</code>裝起來後，發現<code>vim</code>跟<code>svn</code>壞掉，</p>
+<div class="highlight"><pre><span class="nv">$ </span>vim
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;vim&quot;</span>
+<span class="nv">$ </span>svn
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;svn&quot;</span>
+</pre></div>
+
+
+<p>google後發現，因為<code>gettext</code>升級後，把<code>/usr/local/lib/libintl.so.8</code>升到<code>/usr/local/lib/libintl.so.9</code>，而vim跟svn會使用到<code>libintl.so.8</code>，所以出了問題</p>
+<div class="highlight"><pre><span class="nv">$ </span>ldconfig -r | grep <span class="s2">&quot;libintl&quot;</span>
+112:-lintl.9 <span class="o">=</span>&gt; /usr/local/lib/libintl.so.9
+</pre></div>
+
+
+<p>解決的方法就是把有影響到的ports重裝一次，讓他們depend到正確的library，但要如何
+找出受影響的ports呢？</p>
+<div class="highlight"><pre><span class="nv">$ </span>pkg_info -Rx gettext
+Information <span class="k">for </span>gettext-0.18.1.1:
+
+Required by:
+gtk-1.2.10_21
+libgcrypt-1.4.4
+libgpg-error-1.7
+libxslt-1.1.26
+neon28-0.28.6
+py26-subversion-1.6.9
+pysvn-1.7.2
+subversion-1.6.9
+gmake-3.82
+python26-2.6.8_3
+git-1.7.11.3
+gitolite-3.03
+p5-Locale-gettext-1.05_3
+help2man-1.40.10
+vim-7.3.556_1
+</pre></div>
+
+
+<p><strike>p.s. 並不是所有的ports都depend到libintl，所以可以先測試一下binary是否可以正常執行</strike></p>
+<p><em>Updated: 2012/10/11</em></p>
+<p>最近有人把一些機器上的python從2.6升到2.7，愈到了類似的狀況，
+libpython2.6 =&gt; libpython2.7，沒想到這位仁兄竟然直接建soft link指過去...!@#$%&amp;(，
+看到都快吐血了。突然想到我有寫過這篇，於是問了朋友，想知道有沒有更確實的方式可
+以找到哪些ports會被depend，一開始想到用<code>ldd</code></p>
+<div class="highlight"><pre><span class="nv">$ </span>ldd <span class="sb">`</span>which vim<span class="sb">`</span>
+/usr/local/bin/vim:
+    ...
+    libpython2.6.so <span class="o">=</span>&gt; /usr/local/lib/libpython2.6.so <span class="o">(</span>0x800f9d000<span class="o">)</span>
+    ...
+</pre></div>
+
+
+<p>但這樣頗麻煩的，還要一個一個找出binary或library的位置，在朋友的指點下，翻了翻
+<code>/usr/ports/UPDATING</code>，發現gettext版本升級時，UPDATING中就有提出處理的方法...XD</p>
+<div class="highlight"><pre><span class="nv">$ </span>less /usr/ports/UPDATING
+...
+20100530:
+AFFECTS: users of devel/gettext <span class="o">(</span>i.e.: YOU<span class="o">)</span>
+AUTHOR: ade@FreeBSD.org
+
+Another version of gettext <span class="o">(</span>0.18<span class="o">)</span>, and another shared library version
+bump <span class="o">(</span>from intl.8 to intl.9<span class="o">)</span>, so:
+
+All ports that have an identifiable known direct dependency on gettext
+have had their PORTREVISIONs bumped.  If after upgrading:
+
+    <span class="c"># portupgrade -rf gettext</span>
+    <span class="c"># portmaster -w -r gettext</span>
+    ...
+</pre></div>
+
+
+<p>用portmaster把depend gettext的ports全部重編一次就ok了，不過這樣會不會又升爛其他
+東西阿...XD</p>
+            </div><!-- /.entry-content -->
+            
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>

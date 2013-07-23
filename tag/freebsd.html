@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>Lance's blog - FreeBSD</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content">
+
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+		         <ol id="post-list">
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Manually Install FreeBSD 9.0 Release on GPT and Gmirror</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-22T17:50:00"> Wed 22 August 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>新學期、新組別、新測試機</p>
+<p>FreeBSD branch: <a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso">FreeBSD 9.0 Release</a></p>
+<h2>準備安裝環境</h2>
+<p>依照你的環境，把installation media開起來，第一個畫面應該會像這樣
+<img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /></p>
+<p>因為標題寫"manually"，所以選擇<strong>Shell</strong>，接下來一切就靠自己了</p>
+<h2>Preparing disk</h2>
+<p>我們使用GPT(<a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table</a>) scheme，GPT相較於MBR有以下兩個好處，</p>
+<ol>
+<li>可使用於大於2TB的硬碟</li>
+<li>不再受限於四個Primary partitions</li>
+</ol>
+<h3>Create partition table</h3>
+<div class="highlight"><pre><span class="c"># 查看有沒有存在的partition table，應該要是空白的</span>
+<span class="nv">$ </span>gpart show
+
+<span class="c"># 產生gpt scheme</span>
+<span class="nv">$ </span>gpart create -s gpt da0
+<span class="nv">$ </span>gpart create -s gpt da1 ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">FreeBSD: Updating Gettext Breaks Vim and Svn</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-07-27T02:12:00"> Fri 27 July 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>在一台FreeBSD 8.0-RELEASE上把<code>git</code>跟<code>gitolite</code>裝起來後，發現<code>vim</code>跟<code>svn</code>壞掉，</p>
+<div class="highlight"><pre><span class="nv">$ </span>vim
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;vim&quot;</span>
+<span class="nv">$ </span>svn
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;svn&quot;</span>
+</pre></div>
+
+
+<p>google後發現，因為<code>gettext</code>升級後，把<code>/usr/local/lib ...</code></p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+																											</div>
+
+
+
+				        </article></li>
+								</ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+        Page 1 / 1
+    </p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>

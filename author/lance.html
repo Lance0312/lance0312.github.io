@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>Lance's blog - Articles by Lance</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content">
+<h2>Articles by Lance</h2>
+
+
+   <div class="row">
+
+
+        <div class="eleven columns">
+		         <ol id="post-list">
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/bash-wrapping-wei-zhi-cuo-wu.html" rel="bookmark" title="Permalink to bash wrapping 位置錯誤">bash wrapping 位置錯誤</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2011-12-07T10:41:00"> Wed 07 December 2011 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$COLUMNS</span>
+</pre></div>
+
+
+<p>來查看目前terminal的寬度(字元數)</p>
+<p>bash藉由這個變數來決定哪個位置該wrap，改變terminal大小時，通常這個值也會跟著改
+變，但有時候就會有靈異現象，造成terminal大小改變，但COLUMNS的值卻沒有改變</p>
+<p>bash的一個built-in command shopt，或許可以解決這個問題，shopt中有一個選項
+checkwinsize，會在每次做完一個指令後檢查terminal的大小，並視情況更新LINES &amp;
+COLUMNS，可以把他加在 ~/.bashrc 裡面</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">shopt</span> -s checkwinsize
+</pre></div>
+
+
+<p>至於效果如何，需要再觀察看看囉</p>
+<p>Reference:<br />
+<a href="http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin">Bash Reference Manual</a></p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/bash-wrapping-wei-zhi-cuo-wu.html" rel="bookmark" title="Permalink to bash wrapping 位置錯誤">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/bash.html">Bash</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/calculate-with-command-line-tool-bc.html" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Calculate with command-line tool bc</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-04-25T23:57:00"> Wed 25 April 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>Basic usage</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;expr&#39;</span> | bc
+</pre></div>
+
+
+<p>Hex to Dec</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;ibase=16;obase=A;FF&#39;</span> | bc
+255
+</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/calculate-with-command-line-tool-bc.html" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/cli.html">Cli</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">FreeBSD: Updating Gettext Breaks Vim and Svn</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-07-27T02:12:00"> Fri 27 July 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>在一台FreeBSD 8.0-RELEASE上把<code>git</code>跟<code>gitolite</code>裝起來後，發現<code>vim</code>跟<code>svn</code>壞掉，</p>
+<div class="highlight"><pre><span class="nv">$ </span>vim
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;vim&quot;</span>
+<span class="nv">$ </span>svn
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;svn&quot;</span>
+</pre></div>
+
+
+<p>google後發現，因為<code>gettext</code>升級後，把<code>/usr/local/lib ...</code></p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/git-smart-http-with-ldap-auth.html" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Git: Smart Http with LDAP Auth</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-04T02:28:00"> Sat 04 August 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
+svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...</p>
+<h2>How To</h2>
+<p>以下是一個基本的virtual host設定，</p>
+<div class="gist">
+    <script src='https://gist.github.com/3250315.js'></script>
+    <noscript>
+        <pre><code><VirtualHost *:80>
+    ServerName your.domain.name
+    DocumentRoot /srv/http
+
+    setEnv GIT_PROJECT_ROOT /opt/git
+    setEnv GIT_HTTP_EXPORT_ALL
+    scriptAlias /git/ /usr/lib/git-core/git-http-backend/
+
+    <Directory />
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    <LocationMatch "/git/">
+        AuthName "GIT"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthzLDAPAuthoritative off
+        AuthLDAPURL "ldaps://your.ldap.server/ou ...</locationmatch></virtualhost></code></pre></noscript></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/git-smart-http-with-ldap-auth.html" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/git.html">Git</a>
+																											</div>
+
+
+
+				        </article></li>
+								        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/git-stash-how-to.html" rel="bookmark" title="Permalink to Git stash how to">Git stash how to</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-05-04T17:33:00"> Fri 04 May 2012 </abbr>
+				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
+整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
+commit時，我想到我還有台laptop...</p>
+<p>laptop和pc的環境很不一樣，設定檔相對的也會有不少差別，所以我應該要開兩個branch，
+一個放laptop的設定，一個放pc的設定，生性懶惰使然，我不想重作一次工作，也不想把
+完成的部份commit到master branch上，於是<code>git stash</code>就派上用場了，看一下man page
+怎麼說：</p>
+<div class="highlight"><pre><span class="nv">$ </span>man git stash
+...
+DESCRIPTION
+Use git stash when you want to record the current state of the working directory and the index,
+but want ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/git-stash-how-to.html" rel="bookmark" title="Permalink to Git stash how to">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+																			<span>Tagged as : </span>
+																					<a class="danger label" href="http://blog.lance.tw/tag/git.html">Git</a>
+																											</div>
+
+
+
+				        </article></li>
+								</ol><!-- /#posts-list -->
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+<p class="paginator">
+        Page 1 / 2
+            <a href="http://blog.lance.tw/author/lance2.html"><i class="icon-arrow-right"></i></a>
+    </p>
+</section><!-- /#content -->
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/posts.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2012-08-31T14:54:00+08:00</updated><entry><title>Installing Archlinux on GPT and Software RAID</title><link href="http://blog.lance.tw/installing-archlinux-on-gpt-and-software-raid.html" rel="alternate"></link><updated>2012-08-31T14:54:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-31:installing-archlinux-on-gpt-and-software-raid.html</id><summary type="html">&lt;p&gt;昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...&lt;/p&gt;
+&lt;p&gt;在官方&lt;a href="http://www.archlinux.org/news/install-media-20120715-released/"&gt;捨棄AIF(the Arch Installation Framework)&lt;/a&gt;，並以&lt;a href="http://www.archlinux.org/news/install-media-20120804-available/"&gt;GRUB2取代GRUB legacy&lt;/a&gt;後，
+安裝流程對我們所需的環境變得友善多了。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Installation media: &lt;a href="http://linux.cs.nctu.edu.tw/archlinux/iso/2012.08.04/archlinux-2012.08.04-dual.iso"&gt;archlinux-2012.08.04-dual.iso&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Preparing disk&lt;/h2&gt;
+&lt;h3&gt;Create partition table&lt;/h3&gt;
+&lt;p&gt;因為要用GPT scheme，所以使用gdisk來切partition table，依照個人喜好，你也可以選
+擇parted。因為gdisk是interactive的操作模式，所以這邊不細講分割流程，只列出幾個
+要點&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用&lt;code&gt;o&lt;/code&gt;產生空的GPT&lt;/li&gt;
+&lt;li&gt;2MB的partition for GRUB，type code為&lt;code&gt;ef02&lt;/code&gt;(BIOS boot partition)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/boot&lt;/code&gt;, &lt;code&gt;/&lt;/code&gt;, &lt;code&gt;/tmp&lt;/code&gt;的partition作raid，type code要設為&lt;code&gt;fd00&lt;/code&gt;(Linux RAID)&lt;/li&gt;
+&lt;li&gt;把partition table apply到另一顆硬碟上，使用sgdisk或者gdisk的backup功能&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;到此，應該會有類似這樣的partition table&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;sgdisk -p /dev/sda
+Number  Start &lt;span class="o"&gt;(&lt;/span&gt;sector&lt;span class="o"&gt;)&lt;/span&gt;    End &lt;span class="o"&gt;(&lt;/span&gt;sector&lt;span class="o"&gt;)&lt;/span&gt;  Size       Code  Name
+   1            2048            6143   2.0 MiB     EF02  BIOS boot partition
+   2            6144          268287   128.0 MiB   FD00  Linux RAID
+   3          268288         2365439   1024.0 MiB  8200  Linux swap
+   4         2365440        17045503   7.0 GiB     FD00  Linux RAID
+   5        17045504        20971486   1.9 GiB     FD00  Linux RAID
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Create mdadm array&lt;/h3&gt;
+&lt;p&gt;接下來，用mdadm建立array&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;mdadm --create /dev/md2 --level&lt;span class="o"&gt;=&lt;/span&gt;1 --metadata&lt;span class="o"&gt;=&lt;/span&gt;0.90 --raid-devices&lt;span class="o"&gt;=&lt;/span&gt;2 /dev/sda2 /dev/sdb2
+&lt;span class="nv"&gt;$ &lt;/span&gt;mdadm --create /dev/md4 --level&lt;span class="o"&gt;=&lt;/span&gt;1 --metadata&lt;span class="o"&gt;=&lt;/span&gt;0.90 --raid-devices&lt;span class="o"&gt;=&lt;/span&gt;2 /dev/sda4 /dev/sdb4
+&lt;span class="nv"&gt;$ &lt;/span&gt;mdadm --create /dev/md5 --level&lt;span class="o"&gt;=&lt;/span&gt;0 --raid-devices&lt;span class="o"&gt;=&lt;/span&gt;2 /dev/sda5 /dev/sdb5
+&lt;span class="c"&gt;# 查看array的狀態&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;cat /proc/mdstat
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Format partitions&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;/boot&lt;/code&gt;使用ext2，&lt;code&gt;/&lt;/code&gt;使用xfs，&lt;code&gt;/tmp&lt;/code&gt;則使用ext4&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;mkfs.ext2 /dev/md2
+&lt;span class="nv"&gt;$ &lt;/span&gt;mkfs.xfs /dev/md4
+&lt;span class="nv"&gt;$ &lt;/span&gt;mkfs.ext4 /dev/md5
+&lt;span class="nv"&gt;$ &lt;/span&gt;mkswap /dev/sda3
+&lt;span class="nv"&gt;$ &lt;/span&gt;swapon /dev/sda3
+&lt;span class="nv"&gt;$ &lt;/span&gt;mkswap /dev/sdb3
+&lt;span class="nv"&gt;$ &lt;/span&gt;swapon /dev/sdb3
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Mount partitions&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;mount /dev/md4 /mnt
+&lt;span class="c"&gt;# 把切成獨立partition的部份也mount上去&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;mkdir /mnt/boot
+&lt;span class="nv"&gt;$ &lt;/span&gt;mkdir /mnt/tmp
+&lt;span class="nv"&gt;$ &lt;/span&gt;mount /dev/md2 /mnt/boot
+&lt;span class="nv"&gt;$ &lt;/span&gt;mount /dev/md5 /mnt/tmp
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;p&gt;首先，修改/etc/pacman.d/mirrorlist，留下linux.cs.nctu.edu.tw就好&lt;/p&gt;
+&lt;h3&gt;Base system&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pacstrap /mnt base base-devel
+&lt;span class="c"&gt;# genfstab會把有mount進/mnt的partition都一並列出&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;genfstab -p /mnt &amp;gt;&amp;gt; /mnt/etc/fstab
+&lt;span class="nv"&gt;$ &lt;/span&gt;mdadm --detail --scan &amp;gt;&amp;gt; /mnt/etc/mdadm.conf
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Chroot&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# 以往需要先手動mount上dev, sys, proc，arch-chroot都幫你作好了&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;arch-chroot /mnt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Configuration&lt;/h3&gt;
+&lt;p&gt;基本的設定請參照&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/Beginners'_Guide#Configure_the_base_system"&gt;Configure the base system&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/Beginners'_Guide#Configure_the_network"&gt;Configure the network&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Create an initial ramdisk environment&lt;/h3&gt;
+&lt;p&gt;修改/etc/mkinitcpio.conf，在&lt;code&gt;HOOKS&lt;/code&gt;中加入&lt;code&gt;mdadm&lt;/code&gt;，並在&lt;code&gt;MODULES&lt;/code&gt;中加入&lt;code&gt;raid1&lt;/code&gt;，
+接著產生initial ramdisk&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;mkinitcpio -p linux
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Bootloader&lt;/h3&gt;
+&lt;p&gt;我們選擇GRUB for BIOS motherboard&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pacman -S grub-bios
+&lt;span class="c"&gt;# 分別裝在兩顆硬碟上&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;grub-install --target&lt;span class="o"&gt;=&lt;/span&gt;i386-pc --recheck /dev/sda
+&lt;span class="nv"&gt;$ &lt;/span&gt;grub-install --target&lt;span class="o"&gt;=&lt;/span&gt;i386-pc --recheck /dev/sdb
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;為了要讓GRUB認的懂RAID，修改/etc/default/grub，在&lt;code&gt;GRUB_PRELOAD_MODULES&lt;/code&gt;中加入&lt;code&gt;raid&lt;/code&gt;
+，接著產生grub.cfg&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;grub-mkconfig -o /boot/grub/grub.cfg
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;到這邊大致就完成了，設定一下root password，然後退出chroot環境，並重開&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3&gt;Reference&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/Beginners'_Guide"&gt;Arch wiki - Beginners' Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/GPT"&gt;Arch wiki - GPT&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/Mkinitcpio#Using_RAID"&gt;Arch wiki - Mkinitcpio&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/GRUB2#RAID"&gt;Arch wiki - GRUB2&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</summary><category term="Archlinux"></category></entry><entry><title>Manually Install FreeBSD 9.0 Release on GPT and Gmirror</title><link href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="alternate"></link><updated>2012-08-22T17:50:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-22:manually-install-freebsd-90-release-on-gpt-and-gmirror.html</id><summary type="html">&lt;p&gt;新學期、新組別、新測試機&lt;/p&gt;
+&lt;p&gt;FreeBSD branch: &lt;a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso"&gt;FreeBSD 9.0 Release&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;準備安裝環境&lt;/h2&gt;
+&lt;p&gt;依照你的環境，把installation media開起來，第一個畫面應該會像這樣
+&lt;img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /&gt;&lt;/p&gt;
+&lt;p&gt;因為標題寫"manually"，所以選擇&lt;strong&gt;Shell&lt;/strong&gt;，接下來一切就靠自己了&lt;/p&gt;
+&lt;h2&gt;Preparing disk&lt;/h2&gt;
+&lt;p&gt;我們使用GPT(&lt;a href="http://en.wikipedia.org/wiki/GUID_Partition_Table"&gt;GUID Partition Table&lt;/a&gt;) scheme，GPT相較於MBR有以下兩個好處，&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;可使用於大於2TB的硬碟&lt;/li&gt;
+&lt;li&gt;不再受限於四個Primary partitions&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Create partition table&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# 查看有沒有存在的partition table，應該要是空白的&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart show
+
+&lt;span class="c"&gt;# 產生gpt scheme&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart create -s gpt da0
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart create -s gpt da1
+
+&lt;span class="c"&gt;# 切boot&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-boot -s 128 -l boot0 da0
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-boot -s 128 -l boot1 da1
+
+&lt;span class="c"&gt;# 把/boot/pmbr塞到硬碟的第一個sector去，OS就會去找type是freebsd-boot的partition&lt;/span&gt;
+&lt;span class="c"&gt;# 把/boot/gptboot塞到freebsd-boot partition去，OS就會去找type是freebsd-ufs的partition&lt;/span&gt;
+&lt;span class="c"&gt;# 並跑/boot/loader&lt;/span&gt;
+&lt;span class="c"&gt;# (for root on zfs, use gptzfsboot instead)&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart bootcode -b /boot/pmbr -p /boot/gptboot -i 1 da0
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart bootcode -b /boot/pmbr -p /boot/gptboot -i 1 da1
+
+&lt;span class="c"&gt;# 切swap&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-swap -s 512M -l swap0 da0
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-swap -s 512M -l swap1 da1
+
+&lt;span class="c"&gt;# 切root&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-ufs -s 4G -l root0 da0
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-ufs -s 4G -l root1 da1
+
+&lt;span class="c"&gt;# 剩下的部份切一塊給zfs&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-zfs -l zpool0 da0
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart add -t freebsd-zfs -l zpool1 da1
+
+&lt;span class="c"&gt;# 檢查一下結果&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;gpart &lt;span class="nv"&gt;show&lt;/span&gt;
+&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;      34  20971453  da0  GPT  &lt;span class="o"&gt;(&lt;/span&gt;10G&lt;span class="o"&gt;)&lt;/span&gt;
+        34       128    1  freebsd-boot  &lt;span class="o"&gt;(&lt;/span&gt;64k&lt;span class="o"&gt;)&lt;/span&gt;
+       162   1048576    2  freebsd-swap  &lt;span class="o"&gt;(&lt;/span&gt;512M&lt;span class="o"&gt;)&lt;/span&gt;
+   1048738   8388608    3  freebsd-ufs  &lt;span class="o"&gt;(&lt;/span&gt;4.0G&lt;span class="o"&gt;)&lt;/span&gt;
+   9437346  11534141    4  freebsd-zfs  &lt;span class="o"&gt;(&lt;/span&gt;5.5G&lt;span class="o"&gt;)&lt;/span&gt;
+
+&lt;span class="o"&gt;=&lt;/span&gt;&amp;gt;      34  20971453  da1  GPT  &lt;span class="o"&gt;(&lt;/span&gt;10G&lt;span class="o"&gt;)&lt;/span&gt;
+        34       128    1  freebsd-boot  &lt;span class="o"&gt;(&lt;/span&gt;64k&lt;span class="o"&gt;)&lt;/span&gt;
+       162   1048576    2  freebsd-swap  &lt;span class="o"&gt;(&lt;/span&gt;512M&lt;span class="o"&gt;)&lt;/span&gt;
+   1048738   8388608    3  freebsd-ufs  &lt;span class="o"&gt;(&lt;/span&gt;4.0G&lt;span class="o"&gt;)&lt;/span&gt;
+   9437346  11534141    4  freebsd-zfs  &lt;span class="o"&gt;(&lt;/span&gt;5.5G&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;使用gmirror作raid1，並建立filesystem&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;gmirror label -v -b round-robin gm0 /dev/gpt/root*
+&lt;span class="nv"&gt;$ &lt;/span&gt;newfs -O2 -Uj /dev/mirror/gm0
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;安裝FreeBSD&lt;/h2&gt;
+&lt;h3&gt;安裝root filesystem&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /usr/freebsd-dist
+&lt;span class="nv"&gt;$ &lt;/span&gt;mount /dev/mirror/gm0 /mnt
+&lt;span class="nv"&gt;$ &lt;/span&gt;tar xpf base.txz -C /mnt
+&lt;span class="nv"&gt;$ &lt;/span&gt;tar xpf kernel.txz -C /mnt
+&lt;span class="nv"&gt;$ &lt;/span&gt;tar xpf lib32.txz -C /mnt
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;基本設定&lt;/h3&gt;
+&lt;h4&gt;chroot &amp;amp;&amp;amp; 設定root密碼&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;chroot /mnt
+&lt;span class="nv"&gt;$ &lt;/span&gt;passwd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;新增第一個使用者&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;vipw
+&lt;span class="nv"&gt;$ &lt;/span&gt;passwd lance
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;/etc/rc.conf&lt;/h4&gt;
+&lt;div class="gist"&gt;
+    &lt;script src='https://gist.github.com/3428614.js?file=rc.conf'&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+        &lt;pre&gt;&lt;code&gt;hostname="your.domain.name"
+ifconfig_em0="inet 192.168.0.123/24"
+defaultrouter="192.168.0.254"
+# ipv6 autoconf
+ifconfig_em0_ipv6="inet6 accept_rtadv"
+sshd_enable="YES"
+ntpd_enable="YES"
+ntpd_sync_on_host="YES"&lt;/code&gt;&lt;/pre&gt;
+    &lt;/noscript&gt;
+&lt;/div&gt;
+&lt;h4&gt;/etc/fstab&lt;/h4&gt;
+&lt;div class="gist"&gt;
+    &lt;script src='https://gist.github.com/3428614.js?file=fstab'&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+        &lt;pre&gt;&lt;code&gt;/dev/mirror/gm0 / ufs rw 1 1
+/dev/gpt/swap0 none swap sw 0 0
+/dev/gpt/swap1 none swap sw 0 0&lt;/code&gt;&lt;/pre&gt;
+    &lt;/noscript&gt;
+&lt;/div&gt;
+&lt;h4&gt;/boot/loader.conf&lt;/h4&gt;
+&lt;div class="gist"&gt;
+    &lt;script src='https://gist.github.com/3428614.js?file=loader.conf'&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+        &lt;pre&gt;&lt;code&gt;geom_mirror_load="YES"&lt;/code&gt;&lt;/pre&gt;
+    &lt;/noscript&gt;
+&lt;/div&gt;
+&lt;h2&gt;大功告成&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;exit&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;reboot
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;大致步驟如上，至於zfs以及ports的部份，再說!&lt;/p&gt;</summary><category term="FreeBSD"></category></entry><entry><title>Git: Smart Http with LDAP Auth</title><link href="http://blog.lance.tw/git-smart-http-with-ldap-auth.html" rel="alternate"></link><updated>2012-08-04T02:28:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-04:git-smart-http-with-ldap-auth.html</id><summary type="html">&lt;p&gt;過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
+svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...&lt;/p&gt;
+&lt;h2&gt;How To&lt;/h2&gt;
+&lt;p&gt;以下是一個基本的virtual host設定，&lt;/p&gt;
+&lt;div class="gist"&gt;
+    &lt;script src='https://gist.github.com/3250315.js'&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+        &lt;pre&gt;&lt;code&gt;&lt;VirtualHost *:80&gt;
+    ServerName your.domain.name
+    DocumentRoot /srv/http
+
+    setEnv GIT_PROJECT_ROOT /opt/git
+    setEnv GIT_HTTP_EXPORT_ALL
+    scriptAlias /git/ /usr/lib/git-core/git-http-backend/
+
+    &lt;Directory /&gt;
+        Order allow,deny
+        Allow from all
+    &lt;/Directory&gt;
+
+    &lt;LocationMatch "/git/"&gt;
+        AuthName "GIT"
+        AuthType Basic
+        AuthBasicProvider ldap
+        AuthzLDAPAuthoritative off
+        AuthLDAPURL "ldaps://your.ldap.server/ou=People,dc=cs,dc=nctu,dc=edu,dc=tw"
+        Require valid-user
+    &lt;/LocationMatch&gt;
+&lt;/VirtualHost&gt;
+LDAPVerifyServerCert off&lt;/code&gt;&lt;/pre&gt;
+    &lt;/noscript&gt;
+&lt;/div&gt;
+&lt;p&gt;使用的情境是這樣的，當使用者clone了某個repository時，apache會要求輸入帳號密碼，
+並將帳號密碼拿去ldaps://your.ldap.server這台ldap server上作認證&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git clone http://your.domain.name/git/testing.git
+Username &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://your.domain.name&amp;#39;&lt;/span&gt;: username
+Password &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;http://username@your.domain.name&amp;#39;&lt;/span&gt;:
+...
+Unpacking objects: 100% &lt;span class="o"&gt;(&lt;/span&gt;??/??&lt;span class="o"&gt;)&lt;/span&gt;, &lt;span class="k"&gt;done&lt;/span&gt;.
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;同樣的，當&lt;code&gt;git push&lt;/code&gt;時，apache也會向使用者要求帳號密碼&lt;/p&gt;
+&lt;p&gt;有幾點需要注意&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;git bare repositories放在&lt;code&gt;/opt/git&lt;/code&gt;下，ex. &lt;code&gt;/opt/git/testing.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;http://your.domain.name/git/testing.git 對應到 &lt;code&gt;/opt/git/testing.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;由於ldap server用的是self-signed certificate，所以用&lt;code&gt;LDAPVerifyServerCert off&lt;/code&gt;
+  暫時略過檢查&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本的設定都可以在&lt;a href="http://www.kernel.org/pub/software/scm/git/docs/git-http-backend.html" title="git-http-backend man page"&gt;git-http-backend man page&lt;/a&gt;中找到&lt;/p&gt;
+&lt;h2&gt;Situation&lt;/h2&gt;
+&lt;p&gt;man page中有一段snippet長這個樣子，&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;LocationMatch&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;^/git/.*/git-receive-pack$&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    ...
+&lt;span class="nt"&gt;&amp;lt;/LocationMatch&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;上面說，你可以藉此達到&lt;code&gt;git clone&lt;/code&gt;時不認證，&lt;code&gt;git push&lt;/code&gt;時才認證的的效果，這正是我想要的東西，但我試了千萬遍依舊不成功...orz&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git push
+error: Cannot access URL http://your.domain.name/git/test.git/, &lt;span class="k"&gt;return &lt;/span&gt;code 22
+fatal: git-http-push failed
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;要知道為什麼失敗，先來看一下正常的&lt;code&gt;git push&lt;/code&gt;在apache上留下了什麼log&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mo"&gt;04&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Aug&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2012&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mo"&gt;02&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;34&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;0800&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;GET /git/test.git/info/refs?service=git-receive-pack HTTP/1.1&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mo"&gt;04&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Aug&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2012&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mo"&gt;02&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;38&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;0800&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;GET /git/test.git/info/refs?service=git-receive-pack HTTP/1.1&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;username&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mo"&gt;04&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Aug&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2012&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mo"&gt;02&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;38&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;0800&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;GET /git/test.git/info/refs?service=git-receive-pack HTTP/1.1&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;username&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mo"&gt;04&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;Aug&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;2012&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mo"&gt;02&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;19&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;38&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;0800&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;POST /git/test.git/git-receive-pack HTTP/1.1&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;在真正送出POST前，會先送幾次GET，而且在最後一次GET時，已經&lt;strong&gt;通過&lt;/strong&gt;LDAP認證，&lt;br /&gt;
+再回來看看我們的設定
+    &lt;LocationMatch "^/git/.*/git-receive-pack$"&gt;
+翻譯成中文就是，當我們的&lt;code&gt;Location&lt;/code&gt;符合&lt;code&gt;^/git/.*/git-receive-pack$&lt;/code&gt;這段regex時，
+就&lt;strong&gt;開始&lt;/strong&gt;作LDAP認證，這聽起來不像是有問題的樣子，但悲慘的是，LocationMatch不吃
+query string，所以跟本認不得request裡面有git-receive-pack的字眼，Shawn O. Pearce
+在&lt;a href="http://lists-archives.com/git/714311-git-http-backend-and-authenticated-pushes.html" title="Re: git-http-backend and Authenticated Pushes"&gt;mailing list&lt;/a&gt;上有對這個問題說明，並提供了一段patch&lt;/p&gt;
+&lt;p&gt;結論很簡單，大家還是多打幾次密碼吧XD，最好的辦法還是捨棄http，改用ssh key :p&lt;/p&gt;</summary><category term="Git"></category></entry><entry><title>FreeBSD: Updating Gettext Breaks Vim and Svn</title><link href="http://blog.lance.tw/freebsd-updating-gettext-breaks-vim-and-svn.html" rel="alternate"></link><updated>2012-07-27T02:12:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-07-27:freebsd-updating-gettext-breaks-vim-and-svn.html</id><summary type="html">&lt;p&gt;在一台FreeBSD 8.0-RELEASE上把&lt;code&gt;git&lt;/code&gt;跟&lt;code&gt;gitolite&lt;/code&gt;裝起來後，發現&lt;code&gt;vim&lt;/code&gt;跟&lt;code&gt;svn&lt;/code&gt;壞掉，&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;vim
+/libexec/ld-elf.so.1: Shared object &lt;span class="s2"&gt;&amp;quot;libintl.so.8&amp;quot;&lt;/span&gt; not found, required by &lt;span class="s2"&gt;&amp;quot;vim&amp;quot;&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;svn
+/libexec/ld-elf.so.1: Shared object &lt;span class="s2"&gt;&amp;quot;libintl.so.8&amp;quot;&lt;/span&gt; not found, required by &lt;span class="s2"&gt;&amp;quot;svn&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;google後發現，因為&lt;code&gt;gettext&lt;/code&gt;升級後，把&lt;code&gt;/usr/local/lib/libintl.so.8&lt;/code&gt;升到&lt;code&gt;/usr/local/lib/libintl.so.9&lt;/code&gt;，而vim跟svn會使用到&lt;code&gt;libintl.so.8&lt;/code&gt;，所以出了問題&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;ldconfig -r | grep &lt;span class="s2"&gt;&amp;quot;libintl&amp;quot;&lt;/span&gt;
+112:-lintl.9 &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; /usr/local/lib/libintl.so.9
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;解決的方法就是把有影響到的ports重裝一次，讓他們depend到正確的library，但要如何
+找出受影響的ports呢？&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pkg_info -Rx gettext
+Information &lt;span class="k"&gt;for &lt;/span&gt;gettext-0.18.1.1:
+
+Required by:
+gtk-1.2.10_21
+libgcrypt-1.4.4
+libgpg-error-1.7
+libxslt-1.1.26
+neon28-0.28.6
+py26-subversion-1.6.9
+pysvn-1.7.2
+subversion-1.6.9
+gmake-3.82
+python26-2.6.8_3
+git-1.7.11.3
+gitolite-3.03
+p5-Locale-gettext-1.05_3
+help2man-1.40.10
+vim-7.3.556_1
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strike&gt;p.s. 並不是所有的ports都depend到libintl，所以可以先測試一下binary是否可以正常執行&lt;/strike&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Updated: 2012/10/11&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;最近有人把一些機器上的python從2.6升到2.7，愈到了類似的狀況，
+libpython2.6 =&amp;gt; libpython2.7，沒想到這位仁兄竟然直接建soft link指過去...!@#$%&amp;amp;(，
+看到都快吐血了。突然想到我有寫過這篇，於是問了朋友，想知道有沒有更確實的方式可
+以找到哪些ports會被depend，一開始想到用&lt;code&gt;ldd&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;ldd &lt;span class="sb"&gt;`&lt;/span&gt;which vim&lt;span class="sb"&gt;`&lt;/span&gt;
+/usr/local/bin/vim:
+    ...
+    libpython2.6.so &lt;span class="o"&gt;=&lt;/span&gt;&amp;gt; /usr/local/lib/libpython2.6.so &lt;span class="o"&gt;(&lt;/span&gt;0x800f9d000&lt;span class="o"&gt;)&lt;/span&gt;
+    ...
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;但這樣頗麻煩的，還要一個一個找出binary或library的位置，在朋友的指點下，翻了翻
+&lt;code&gt;/usr/ports/UPDATING&lt;/code&gt;，發現gettext版本升級時，UPDATING中就有提出處理的方法...XD&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;less /usr/ports/UPDATING
+...
+20100530:
+AFFECTS: users of devel/gettext &lt;span class="o"&gt;(&lt;/span&gt;i.e.: YOU&lt;span class="o"&gt;)&lt;/span&gt;
+AUTHOR: ade@FreeBSD.org
+
+Another version of gettext &lt;span class="o"&gt;(&lt;/span&gt;0.18&lt;span class="o"&gt;)&lt;/span&gt;, and another shared library version
+bump &lt;span class="o"&gt;(&lt;/span&gt;from intl.8 to intl.9&lt;span class="o"&gt;)&lt;/span&gt;, so:
+
+All ports that have an identifiable known direct dependency on gettext
+have had their PORTREVISIONs bumped.  If after upgrading:
+
+    &lt;span class="c"&gt;# portupgrade -rf gettext&lt;/span&gt;
+    &lt;span class="c"&gt;# portmaster -w -r gettext&lt;/span&gt;
+    ...
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;用portmaster把depend gettext的ports全部重編一次就ok了，不過這樣會不會又升爛其他
+東西阿...XD&lt;/p&gt;</summary><category term="FreeBSD"></category></entry><entry><title>Git stash how to</title><link href="http://blog.lance.tw/git-stash-how-to.html" rel="alternate"></link><updated>2012-05-04T17:33:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-05-04:git-stash-how-to.html</id><summary type="html">&lt;p&gt;故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
+整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
+commit時，我想到我還有台laptop...&lt;/p&gt;
+&lt;p&gt;laptop和pc的環境很不一樣，設定檔相對的也會有不少差別，所以我應該要開兩個branch，
+一個放laptop的設定，一個放pc的設定，生性懶惰使然，我不想重作一次工作，也不想把
+完成的部份commit到master branch上，於是&lt;code&gt;git stash&lt;/code&gt;就派上用場了，看一下man page
+怎麼說：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;man git stash
+...
+DESCRIPTION
+Use git stash when you want to record the current state of the working directory and the index,
+but want to go back to a clean working directory...
+...
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;以下是我的流程：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# do something...&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git add . &lt;span class="c"&gt;# 將目前的變更加入stage&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git stash &lt;span class="c"&gt;# stage的狀態會被存起來，並將working directory reset&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git checkout -b newbranch &lt;span class="c"&gt;# 產生一個新的branch並checkout&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git stash pop &lt;span class="c"&gt;# 將存起來的stage狀態pop出來&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;man page裡面提供了另外兩種情境可以參考&lt;/p&gt;
+&lt;h3&gt;Pulling into a dirty tree&lt;/h3&gt;
+&lt;p&gt;upstream有了更新，但跟你的local changes有conflict，導致無法直接用&lt;code&gt;git pull&lt;/code&gt;解決&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git stash
+&lt;span class="nv"&gt;$ &lt;/span&gt;git pull
+&lt;span class="nv"&gt;$ &lt;/span&gt;git stash pop
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Interrupted workflow&lt;/h3&gt;
+&lt;p&gt;你老闆要你馬上修正某個問題，但你正在做些偉大的事，一個方法是，先把目前的工作
+commit到一個臨時的branch上，等到問題解決了，在soft reset回來，用&lt;code&gt;git stash&lt;/code&gt;可以
+大大簡化這步驟&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;# changing the world...&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git stash
+&lt;span class="c"&gt;# fix something...&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git commit -a -m &lt;span class="s2"&gt;&amp;quot;Stupid bug fixed.&amp;quot;&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git stash pop
+&lt;span class="c"&gt;# continue on changing the world...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;git stash pop&lt;/code&gt;有可能會遇到conflict的狀況，哪天遇到了再回來補充...&lt;/p&gt;</summary><category term="Git"></category></entry><entry><title>Vim: Delete lines that match a pattern</title><link href="http://blog.lance.tw/vim-delete-lines-that-match-a-pattern.html" rel="alternate"></link><updated>2012-05-04T11:43:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-05-04:vim-delete-lines-that-match-a-pattern.html</id><summary type="html">&lt;p&gt;Delete lines that match the pattern&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;g&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Delete lines that do not match the pattern&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;  
+&lt;span class="n"&gt;or&lt;/span&gt;  
+&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;g&lt;/span&gt;&lt;span class="o"&gt;!/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Vim"></category></entry><entry><title>Calculate with command-line tool bc</title><link href="http://blog.lance.tw/calculate-with-command-line-tool-bc.html" rel="alternate"></link><updated>2012-04-25T23:57:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-04-25:calculate-with-command-line-tool-bc.html</id><summary type="html">&lt;p&gt;Basic usage&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;expr&amp;#39;&lt;/span&gt; | bc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Hex to Dec&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;ibase=16;obase=A;FF&amp;#39;&lt;/span&gt; | bc
+255
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Cli"></category></entry><entry><title>Python: list assigning(copying)</title><link href="http://blog.lance.tw/python-list-assigningcopying.html" rel="alternate"></link><updated>2011-12-17T11:49:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2011-12-17:python-list-assigningcopying.html</id><summary type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
+&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
+&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
+&lt;span class="go"&gt;[10,2,3,4,5]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;在python中，list的assign有點類似c的pointer，改變b的值同時也會改變a的值，要作到
+真正的copy有兩種方法：&lt;/p&gt;
+&lt;h3&gt;slicing&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;[:]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;這個作法雖然簡單，但是在nested的結構中會有問題，可以改採用第二種方法&lt;/p&gt;
+&lt;h3&gt;module copy&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;copy&lt;/span&gt;
+&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;module copy中又有copy與deepcopy，兩者的差別要再研究研究&lt;/p&gt;
+&lt;p&gt;Reference:&lt;br /&gt;
+&lt;a href="http://docs.python.org/library/copy.html"&gt;python module copy&lt;/a&gt;&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>bash wrapping 位置錯誤</title><link href="http://blog.lance.tw/bash-wrapping-wei-zhi-cuo-wu.html" rel="alternate"></link><updated>2011-12-07T10:41:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2011-12-07:bash-wrapping-wei-zhi-cuo-wu.html</id><summary type="html">&lt;p&gt;在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$COLUMNS&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;來查看目前terminal的寬度(字元數)&lt;/p&gt;
+&lt;p&gt;bash藉由這個變數來決定哪個位置該wrap，改變terminal大小時，通常這個值也會跟著改
+變，但有時候就會有靈異現象，造成terminal大小改變，但COLUMNS的值卻沒有改變&lt;/p&gt;
+&lt;p&gt;bash的一個built-in command shopt，或許可以解決這個問題，shopt中有一個選項
+checkwinsize，會在每次做完一個指令後檢查terminal的大小，並視情況更新LINES &amp;amp;
+COLUMNS，可以把他加在 ~/.bashrc 裡面&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;shopt&lt;/span&gt; -s checkwinsize
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;至於效果如何，需要再觀察看看囉&lt;/p&gt;
+&lt;p&gt;Reference:&lt;br /&gt;
+&lt;a href="http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin"&gt;Bash Reference Manual&lt;/a&gt;&lt;/p&gt;</summary><category term="Bash"></category></entry></feed>

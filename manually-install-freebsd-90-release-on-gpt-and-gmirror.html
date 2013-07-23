@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        
+        <title>Manually Install FreeBSD 9.0 Release on GPT and Gmirror</title>
+        <meta charset="utf-8" />
+                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+                                                <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
+                                
+
+        <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
+
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/gumby.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="http://blog.lance.tw/theme/pygment.css" />
+
+        <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
+
+
+          
+
+
+
+        </head>
+
+<body id="index" class="home">
+
+
+    <div class="container">
+
+        <div class="row">
+
+          <header id="banner" class="body">
+                  <h1><a href="http://blog.lance.tw">Lance's blog <strong></strong></a></h1>
+          </header><!-- /#banner -->
+
+            <div id="navigation" class="navbar row">
+              <a href="#" gumby-trigger="#navigation &gt; ul" class="toggle"><i class="icon-menu"></i></a>
+             
+              <ul class="columns">
+                <li><a href="http://blog.lance.tw">Home</a></li>
+
+                            <li><a href="/archives.html">Archives</a></li>
+                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+                          
+              </ul>
+            </div>
+
+          <section id="content" class="body">
+
+   <div class="row">
+        <div class="eleven columns">
+
+
+            <header>
+              <h2 class="entry-title">
+                <a href="http://blog.lance.tw/manually-install-freebsd-90-release-on-gpt-and-gmirror.html" rel="bookmark"
+                   title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Manually Install FreeBSD 9.0 Release on GPT and Gmirror</a></h2>
+                      
+            </header>
+            <footer class="post-info">
+              <abbr class="published" title="2012-08-22T17:50:00">
+                Wed 22 August 2012
+              </abbr>
+                            <address class="vcard author">
+                By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a>
+              </address>
+                          </footer><!-- /.post-info -->
+            <div class="entry-content">
+              <p>新學期、新組別、新測試機</p>
+<p>FreeBSD branch: <a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso">FreeBSD 9.0 Release</a></p>
+<h2>準備安裝環境</h2>
+<p>依照你的環境，把installation media開起來，第一個畫面應該會像這樣
+<img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /></p>
+<p>因為標題寫"manually"，所以選擇<strong>Shell</strong>，接下來一切就靠自己了</p>
+<h2>Preparing disk</h2>
+<p>我們使用GPT(<a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table</a>) scheme，GPT相較於MBR有以下兩個好處，</p>
+<ol>
+<li>可使用於大於2TB的硬碟</li>
+<li>不再受限於四個Primary partitions</li>
+</ol>
+<h3>Create partition table</h3>
+<div class="highlight"><pre><span class="c"># 查看有沒有存在的partition table，應該要是空白的</span>
+<span class="nv">$ </span>gpart show
+
+<span class="c"># 產生gpt scheme</span>
+<span class="nv">$ </span>gpart create -s gpt da0
+<span class="nv">$ </span>gpart create -s gpt da1
+
+<span class="c"># 切boot</span>
+<span class="nv">$ </span>gpart add -t freebsd-boot -s 128 -l boot0 da0
+<span class="nv">$ </span>gpart add -t freebsd-boot -s 128 -l boot1 da1
+
+<span class="c"># 把/boot/pmbr塞到硬碟的第一個sector去，OS就會去找type是freebsd-boot的partition</span>
+<span class="c"># 把/boot/gptboot塞到freebsd-boot partition去，OS就會去找type是freebsd-ufs的partition</span>
+<span class="c"># 並跑/boot/loader</span>
+<span class="c"># (for root on zfs, use gptzfsboot instead)</span>
+<span class="nv">$ </span>gpart bootcode -b /boot/pmbr -p /boot/gptboot -i 1 da0
+<span class="nv">$ </span>gpart bootcode -b /boot/pmbr -p /boot/gptboot -i 1 da1
+
+<span class="c"># 切swap</span>
+<span class="nv">$ </span>gpart add -t freebsd-swap -s 512M -l swap0 da0
+<span class="nv">$ </span>gpart add -t freebsd-swap -s 512M -l swap1 da1
+
+<span class="c"># 切root</span>
+<span class="nv">$ </span>gpart add -t freebsd-ufs -s 4G -l root0 da0
+<span class="nv">$ </span>gpart add -t freebsd-ufs -s 4G -l root1 da1
+
+<span class="c"># 剩下的部份切一塊給zfs</span>
+<span class="nv">$ </span>gpart add -t freebsd-zfs -l zpool0 da0
+<span class="nv">$ </span>gpart add -t freebsd-zfs -l zpool1 da1
+
+<span class="c"># 檢查一下結果</span>
+<span class="nv">$ </span>gpart <span class="nv">show</span>
+<span class="o">=</span>&gt;      34  20971453  da0  GPT  <span class="o">(</span>10G<span class="o">)</span>
+        34       128    1  freebsd-boot  <span class="o">(</span>64k<span class="o">)</span>
+       162   1048576    2  freebsd-swap  <span class="o">(</span>512M<span class="o">)</span>
+   1048738   8388608    3  freebsd-ufs  <span class="o">(</span>4.0G<span class="o">)</span>
+   9437346  11534141    4  freebsd-zfs  <span class="o">(</span>5.5G<span class="o">)</span>
+
+<span class="o">=</span>&gt;      34  20971453  da1  GPT  <span class="o">(</span>10G<span class="o">)</span>
+        34       128    1  freebsd-boot  <span class="o">(</span>64k<span class="o">)</span>
+       162   1048576    2  freebsd-swap  <span class="o">(</span>512M<span class="o">)</span>
+   1048738   8388608    3  freebsd-ufs  <span class="o">(</span>4.0G<span class="o">)</span>
+   9437346  11534141    4  freebsd-zfs  <span class="o">(</span>5.5G<span class="o">)</span>
+</pre></div>
+
+
+<h3>使用gmirror作raid1，並建立filesystem</h3>
+<div class="highlight"><pre><span class="nv">$ </span>gmirror label -v -b round-robin gm0 /dev/gpt/root*
+<span class="nv">$ </span>newfs -O2 -Uj /dev/mirror/gm0
+</pre></div>
+
+
+<h2>安裝FreeBSD</h2>
+<h3>安裝root filesystem</h3>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /usr/freebsd-dist
+<span class="nv">$ </span>mount /dev/mirror/gm0 /mnt
+<span class="nv">$ </span>tar xpf base.txz -C /mnt
+<span class="nv">$ </span>tar xpf kernel.txz -C /mnt
+<span class="nv">$ </span>tar xpf lib32.txz -C /mnt
+</pre></div>
+
+
+<h3>基本設定</h3>
+<h4>chroot &amp;&amp; 設定root密碼</h4>
+<div class="highlight"><pre><span class="nv">$ </span>chroot /mnt
+<span class="nv">$ </span>passwd
+</pre></div>
+
+
+<h4>新增第一個使用者</h4>
+<div class="highlight"><pre><span class="nv">$ </span>vipw
+<span class="nv">$ </span>passwd lance
+</pre></div>
+
+
+<h4>/etc/rc.conf</h4>
+<div class="gist">
+    <script src='https://gist.github.com/3428614.js?file=rc.conf'></script>
+    <noscript>
+        <pre><code>hostname="your.domain.name"
+ifconfig_em0="inet 192.168.0.123/24"
+defaultrouter="192.168.0.254"
+# ipv6 autoconf
+ifconfig_em0_ipv6="inet6 accept_rtadv"
+sshd_enable="YES"
+ntpd_enable="YES"
+ntpd_sync_on_host="YES"</code></pre>
+    </noscript>
+</div>
+<h4>/etc/fstab</h4>
+<div class="gist">
+    <script src='https://gist.github.com/3428614.js?file=fstab'></script>
+    <noscript>
+        <pre><code>/dev/mirror/gm0 / ufs rw 1 1
+/dev/gpt/swap0 none swap sw 0 0
+/dev/gpt/swap1 none swap sw 0 0</code></pre>
+    </noscript>
+</div>
+<h4>/boot/loader.conf</h4>
+<div class="gist">
+    <script src='https://gist.github.com/3428614.js?file=loader.conf'></script>
+    <noscript>
+        <pre><code>geom_mirror_load="YES"</code></pre>
+    </noscript>
+</div>
+<h2>大功告成</h2>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">exit</span>
+<span class="nv">$ </span>reboot
+</pre></div>
+
+
+<p>大致步驟如上，至於zfs以及ports的部份，再說!</p>
+            </div><!-- /.entry-content -->
+            
+
+        </div><!-- /.eleven.columns -->
+        
+     <div class="three columns">
+
+<h4>Pages</h4>
+
+ <ul>
+        <li><a href="/archives.html">Archives</a></li>
+              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+        </ul>
+
+<h4>Categories</h4>
+<ul>
+			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+	</ul>
+
+
+<h4>Tags</h4>
+	<ul>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	</ul>
+
+
+
+</div> </div><!-- /.row -->
+
+
+</section>
+
+       </div><!-- /.row -->
+    </div><!-- /.container -->
+
+
+       <div class="container.nopad bg">
+
+    
+        <footer id="credits" class="row">
+          <div class="seven columns left-center">
+
+                   <address id="about" class="vcard body">
+                    Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                    which takes great advantage of <a href="http://python.org">Python</a>.
+                    <br />
+                    Based on the <a target="_blank" href="http://gumbyframework.com">Gumby Framework</a>
+                    </address>
+          </div>
+
+
+          <div class="seven columns">
+            <div class="row">
+              <ul class="socbtns">
+
+                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+                
+                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+                
+                
+                
+              </ul>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+
+  <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
+  <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
+
+</body>
+</html>
