@@ -8,6 +8,7 @@ Please visit [Github](https://github.com/Lance0312) for my work!
 ### PGP Public Key
 
 * Key ID: [0x6A0C53E2](http://pgp.mit.edu:11371/pks/lookup?search=0x6A0C53E2&op=index&fingerprint=on)
+* Key File: [http://pgp.lance.tw](http://pgp.lance.tw)
 * Fingerprint: F8DA BD84 6787 EBE5 C8CA  58C6 BD3F 87DB 6A0C 53E2
 
 ```
