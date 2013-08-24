@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/all.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2012-08-31T14:54:00+08:00</updated><entry><title>Installing Archlinux on GPT and Software RAID</title><link href="http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/" rel="alternate"></link><updated>2012-08-31T14:54:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-31:posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/</id><summary type="html">&lt;p&gt;昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/all.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2013-08-24T16:04:00+08:00</updated><entry><title>Attach mails as attachments in Mutt</title><link href="http://blog.lance.tw/posts/2013/08/24/attach-mails-as-attachments-in-mutt/" rel="alternate"></link><updated>2013-08-24T16:04:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2013-08-24:posts/2013/08/24/attach-mails-as-attachments-in-mutt/</id><summary type="html">&lt;p&gt;We all know how to attach a file as an attachment in Mutt. Just press &lt;code&gt;a&lt;/code&gt; in
+&lt;a href="http://dev.mutt.org/trac/wiki/MuttGuide/Actions#primarymodes" title="MuttGuide/Actions"&gt;attach mode&lt;/a&gt;, and either type the file name or press &lt;code&gt;?&lt;/code&gt; to open up a file
+list.&lt;/p&gt;
+&lt;p&gt;But what to do when it comes to attaching a mail or even mails? For a single
+mail, just forward it. For multiple mails, here's what I found. Mutt has a
+command &lt;code&gt;attach-message&lt;/code&gt;, which is default bind to &lt;code&gt;A&lt;/code&gt;. The help message says,&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;A&lt;/span&gt;      &lt;span class="n"&gt;attach&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;message&lt;/span&gt;                  &lt;span class="n"&gt;attach&lt;/span&gt; &lt;span class="n"&gt;message&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;this&lt;/span&gt; &lt;span class="n"&gt;message&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It is a little bit confusing after pressing &lt;code&gt;A&lt;/code&gt; and choose a mail box to open
+up. You just need to press &lt;code&gt;t&lt;/code&gt; to tag any messages you want to attach and press
+&lt;code&gt;q&lt;/code&gt; to return to the attach mode. Then you will see those messages appear in the
+attachment list.&lt;/p&gt;
+&lt;p&gt;Moreover, you can press &lt;code&gt;^D&lt;/code&gt; on a message to toggle it between inline and attachment.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;     &lt;span class="n"&gt;toggle&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;disposition&lt;/span&gt;              &lt;span class="n"&gt;toggle&lt;/span&gt; &lt;span class="n"&gt;disposition&lt;/span&gt; &lt;span class="n"&gt;between&lt;/span&gt; &lt;span class="kr"&gt;inline&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;attachment&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Mutt"></category></entry><entry><title>Installing Archlinux on GPT and Software RAID</title><link href="http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/" rel="alternate"></link><updated>2012-08-31T14:54:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-31:posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/</id><summary type="html">&lt;p&gt;昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...&lt;/p&gt;
 &lt;p&gt;在官方&lt;a href="http://www.archlinux.org/news/install-media-20120715-released/"&gt;捨棄AIF(the Arch Installation Framework)&lt;/a&gt;，並以&lt;a href="http://www.archlinux.org/news/install-media-20120804-available/"&gt;GRUB2取代GRUB legacy&lt;/a&gt;後，
 安裝流程對我們所需的環境變得友善多了。&lt;/p&gt;
 &lt;hr /&gt;
