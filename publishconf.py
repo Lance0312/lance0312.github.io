@@ -24,4 +24,9 @@ DELETE_OUTPUT_DIRECTORY = True
 GOOGLE_ANALYTICS_NAME = "Lance's Blog"
 GOOGLE_ANALYTICS_ID = "UA-42632450-1"
 
-FILES_TO_COPY = (('extra/CNAME', 'CNAME'),)
+STATIC_PATHS = [
+    'extra/CNAME',
+]
+EXTRA_PATH_METADATA = {
+    'extra/CNAME': {'path': 'CNAME'},
+}
