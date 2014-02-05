@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        
+
         <title>Lance's blog - Articles by Lance</title>
         <meta charset="utf-8" />
-                <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
-                                                                
+        <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
+
 
         <!-- Mobile viewport optimized: j.mp/bplateviewport -->
         <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1">
@@ -17,7 +17,7 @@
         <script src="http://blog.lance.tw/theme/js/libs/modernizr-2.6.2.min.js"></script>
 
 
-                        <script>
+              <script>
                 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -27,11 +27,11 @@
                 ga('send', 'pageview');
 
               </script>
-          
 
 
 
-        </head>
+
+</head>
 
 <body id="index" class="home">
 
@@ -50,13 +50,13 @@
               <ul class="columns">
                 <li><a href="http://blog.lance.tw">Home</a></li>
 
-                            <li><a href="/archives.html">Archives</a></li>
-                                                      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
-                          
+                <li><a href="/archives.html">Archives</a></li>
+                <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+
               </ul>
             </div>
 
-          <section id="content">
+<section id="content">
 <h2>Articles by Lance</h2>
 
 
@@ -65,11 +65,11 @@
 
         <div class="eleven columns">
 		         <ol id="post-list">
-								        <li><article class="hentry">
+				        <li><article class="hentry">
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2013/08/24/attach-mails-as-attachments-in-mutt/" rel="bookmark" title="Permalink to Attach mails as attachments in Mutt">Attach mails as attachments in Mutt</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2013-08-24T16:04:00"> Sat 24 August 2013 </abbr>
-				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>We all know how to attach a file as an attachment in Mutt. Just press <code>a</code> in
 <a href="http://dev.mutt.org/trac/wiki/MuttGuide/Actions#primarymodes" title="MuttGuide/Actions">attach mode</a>, and either type the file name or press <code>?</code> to open up a file
 list.</p>
@@ -80,108 +80,87 @@ list.</p>
 
 
 								<div class="row tag-row">
-																			<span>Tagged as : </span>
-																					<a class="danger label" href="http://blog.lance.tw/tag/mutt.html">Mutt</a>
-																											</div>
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/mutt.html">Mutt</a>
+								</div>
 
 
 
 				        </article></li>
-								        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/" rel="bookmark" title="Permalink to bash wrapping 位置錯誤">bash wrapping 位置錯誤</a></h2> </header>
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/" rel="bookmark" title="Permalink to Installing Archlinux on GPT and Software RAID">Installing Archlinux on GPT and Software RAID</a></h2> </header>
 				                <footer class="post-info">
-				                    <abbr class="published" title="2011-12-07T10:41:00"> Wed 07 December 2011 </abbr>
-				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <p>在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$COLUMNS</span>
-</pre></div>
+				                    <abbr class="published" title="2012-08-31T14:54:00"> Fri 31 August 2012 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...</p>
+<p>在官方<a href="http://www.archlinux.org/news/install-media-20120715-released/">捨棄AIF(the Arch Installation Framework)</a>，並以<a href="http://www.archlinux.org/news/install-media-20120804-available/">GRUB2取代GRUB legacy</a>後，
+安裝流程對我們所需的環境變得友善多了。</p>
+<hr />
+<p>Installation media: <a href="http://linux.cs.nctu.edu.tw/archlinux/iso/2012.08.04/archlinux-2012.08.04-dual.iso">archlinux-2012.08.04-dual.iso</a></p>
+<h2>Preparing disk</h2>
+<h3>Create partition table</h3>
+<p>因為要用GPT scheme，所以使用gdisk來切partition table，依照個人喜好，你也可以選
+擇parted。因為gdisk是interactive的操作模式，所以這邊不細講分割流程，只列出幾個
+要點</p>
+<ol>
+<li>使用<code>o</code>產生空的GPT</li>
+<li>2MB的partition for GRUB，type code為<code>ef02</code>(BIOS boot partition)</li>
+<li><code>/boot</code>, <code>/</code>, <code>/tmp ...</code></li></ol> </div><!-- /.entry-content -->
 
-
-<p>來查看目前terminal的寬度(字元數)</p>
-<p>bash藉由這個變數來決定哪個位置該wrap，改變terminal大小時，通常這個值也會跟著改
-變，但有時候就會有靈異現象，造成terminal大小改變，但COLUMNS的值卻沒有改變</p>
-<p>bash的一個built-in command shopt，或許可以解決這個問題，shopt中有一個選項
-checkwinsize，會在每次做完一個指令後檢查terminal的大小，並視情況更新LINES &amp;
-COLUMNS，可以把他加在 ~/.bashrc 裡面</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">shopt</span> -s checkwinsize
-</pre></div>
-
-
-<p>至於效果如何，需要再觀察看看囉</p>
-<p>Reference:<br />
-<a href="http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin">Bash Reference Manual</a></p> </div><!-- /.entry-content -->
-
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/" rel="bookmark" title="Permalink to bash wrapping 位置錯誤">Read more <i class="icon-arrow-right"></i></a></div>
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/" rel="bookmark" title="Permalink to Installing Archlinux on GPT and Software RAID">Read more <i class="icon-arrow-right"></i></a></div>
 
 
 
 								<div class="row tag-row">
-																			<span>Tagged as : </span>
-																					<a class="danger label" href="http://blog.lance.tw/tag/bash.html">Bash</a>
-																											</div>
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a>
+								</div>
 
 
 
 				        </article></li>
-								        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Calculate with command-line tool bc</a></h2> </header>
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Manually Install FreeBSD 9.0 Release on GPT and Gmirror</a></h2> </header>
 				                <footer class="post-info">
-				                    <abbr class="published" title="2012-04-25T23:57:00"> Wed 25 April 2012 </abbr>
-				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <p>Basic usage</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;expr&#39;</span> | bc
-</pre></div>
+				                    <abbr class="published" title="2012-08-22T17:50:00"> Wed 22 August 2012 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>新學期、新組別、新測試機</p>
+<p>FreeBSD branch: <a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso">FreeBSD 9.0 Release</a></p>
+<h2>準備安裝環境</h2>
+<p>依照你的環境，把installation media開起來，第一個畫面應該會像這樣
+<img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /></p>
+<p>因為標題寫"manually"，所以選擇<strong>Shell</strong>，接下來一切就靠自己了</p>
+<h2>Preparing disk</h2>
+<p>我們使用GPT(<a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table</a>) scheme，GPT相較於MBR有以下兩個好處，</p>
+<ol>
+<li>可使用於大於2TB的硬碟</li>
+<li>不再受限於四個Primary partitions</li>
+</ol>
+<h3>Create partition table</h3>
+<div class="highlight"><pre><span class="c"># 查看有沒有存在的partition table，應該要是空白的</span>
+<span class="nv">$ </span>gpart show
 
+<span class="c"># 產生gpt scheme</span>
+<span class="nv">$ </span>gpart create -s gpt da0
+<span class="nv">$ </span>gpart create -s gpt da1 ...</pre></div> </div><!-- /.entry-content -->
 
-<p>Hex to Dec</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;ibase=16;obase=A;FF&#39;</span> | bc
-255
-</pre></div> </div><!-- /.entry-content -->
-
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Read more <i class="icon-arrow-right"></i></a></div>
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Read more <i class="icon-arrow-right"></i></a></div>
 
 
 
 								<div class="row tag-row">
-																			<span>Tagged as : </span>
-																					<a class="danger label" href="http://blog.lance.tw/tag/cli.html">Cli</a>
-																											</div>
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+								</div>
 
 
 
 				        </article></li>
-								        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">FreeBSD: Updating Gettext Breaks Vim and Svn</a></h2> </header>
-				                <footer class="post-info">
-				                    <abbr class="published" title="2012-07-27T02:12:00"> Fri 27 July 2012 </abbr>
-				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <p>在一台FreeBSD 8.0-RELEASE上把<code>git</code>跟<code>gitolite</code>裝起來後，發現<code>vim</code>跟<code>svn</code>壞掉，</p>
-<div class="highlight"><pre><span class="nv">$ </span>vim
-/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;vim&quot;</span>
-<span class="nv">$ </span>svn
-/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;svn&quot;</span>
-</pre></div>
-
-
-<p>google後發現，因為<code>gettext</code>升級後，把<code>/usr/local/lib ...</code></p> </div><!-- /.entry-content -->
-
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">Read more <i class="icon-arrow-right"></i></a></div>
-
-
-
-								<div class="row tag-row">
-																			<span>Tagged as : </span>
-																					<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
-																											</div>
-
-
-
-				        </article></li>
-								        <li><article class="hentry">
+				        <li><article class="hentry">
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Git: Smart Http with LDAP Auth</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-08-04T02:28:00"> Sat 04 August 2012 </abbr>
-				                    <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
 svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...</p>
 <h2>How To</h2>
@@ -214,52 +193,79 @@ svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git�
 
 
 								<div class="row tag-row">
-																			<span>Tagged as : </span>
-																					<a class="danger label" href="http://blog.lance.tw/tag/git.html">Git</a>
-																											</div>
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/git.html">Git</a>
+								</div>
 
 
 
 				        </article></li>
-								</ol><!-- /#posts-list -->
+				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">FreeBSD: Updating Gettext Breaks Vim and Svn</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-07-27T02:12:00"> Fri 27 July 2012 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>在一台FreeBSD 8.0-RELEASE上把<code>git</code>跟<code>gitolite</code>裝起來後，發現<code>vim</code>跟<code>svn</code>壞掉，</p>
+<div class="highlight"><pre><span class="nv">$ </span>vim
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;vim&quot;</span>
+<span class="nv">$ </span>svn
+/libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;svn&quot;</span>
+</pre></div>
+
+
+<p>google後發現，因為<code>gettext</code>升級後，把<code>/usr/local/lib ...</code></p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+								</div>
+
+
+
+				        </article></li>
+				</ol><!-- /#posts-list -->
 
         </div><!-- /.eleven.columns -->
         
-     <div class="three columns">
+<div class="three columns">
 
 <h4>Pages</h4>
 
  <ul>
-        <li><a href="/archives.html">Archives</a></li>
-              <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
-        </ul>
+      <li><a href="/archives.html">Archives</a></li>
+      <li><a href="http://blog.lance.tw/pages/about.html">About</a></li>
+  </ul>
 
 <h4>Categories</h4>
 <ul>
-			<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
-	</ul>
+		<li><a href="http://blog.lance.tw/category/posts.html">Posts</a></li>
+</ul>
 
 
 <h4>Tags</h4>
 	<ul>
-		    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
-		    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
-		    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
-	</ul>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
+</ul>
 
 
 
 </div> </div><!-- /.row -->
 
 <p class="paginator">
-        Page 1 / 2
-            <a href="http://blog.lance.tw/author/lance2.html"><i class="icon-arrow-right"></i></a>
-    </p>
+    Page 1 / 2
+        <a href="http://blog.lance.tw/author/lance2.html"><i class="icon-arrow-right"></i></a>
+</p>
 </section><!-- /#content -->
 
        </div><!-- /.row -->
@@ -285,12 +291,12 @@ svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git�
             <div class="row">
               <ul class="socbtns">
 
-                                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
-                
-                                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
-                
-                
-                
+                <li><div class="btn primary"><a href="https://github.com/Lance0312" target="_blank">Github</a></div></li>
+
+                <li><div class="btn twitter"><a href="https://twitter.com/Lance0312" target="_blank">Twitter</a></div></li>
+
+
+
               </ul>
             </div>
           </div>
@@ -299,6 +305,15 @@ svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git�
     </div>
 
 
+<script type="text/javascript">
+    var disqus_shortname = 'bloglancetw';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
   <script src="http://blog.lance.tw/theme/js/libs/jquery-1.9.1.min.js"></script>
   <script src="http://blog.lance.tw/theme/js/libs/gumby.min.js"></script>
   <script src="http://blog.lance.tw/theme/js/plugins.js"></script>
