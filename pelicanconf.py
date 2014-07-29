@@ -28,7 +28,8 @@ DEFAULT_PAGINATION = 5
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
 
-PLUGINS = ['pelican_gist',]
+PLUGIN_PATHS = ['plugins', ]
+PLUGINS = ['pelican_gist', 'render_math']
 
 MARKUP = ('mkd',)
 
