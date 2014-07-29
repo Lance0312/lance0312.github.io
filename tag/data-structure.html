@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-        <title>Lance's blog - Articles by Lance</title>
+        <title>Lance's blog - Data structure</title>
         <meta charset="utf-8" />
         <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
 
@@ -57,7 +57,7 @@
             </div>
 
 <section id="content">
-<h2>Articles by Lance</h2>
+
 
 
    <div class="row">
@@ -66,36 +66,73 @@
         <div class="eleven columns">
 		         <ol id="post-list">
 				        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/" rel="bookmark" title="Permalink to bash wrapping 位置錯誤">bash wrapping 位置錯誤</a></h2> </header>
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="bookmark" title="Permalink to 來複習一下資料結構 - Priority Queue">來複習一下資料結構 - Priority Queue</a></h2> </header>
 				                <footer class="post-info">
-				                    <abbr class="published" title="2011-12-07T10:41:00"> Wed 07 December 2011 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <p>在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$COLUMNS</span>
-</pre></div>
+				                    <abbr class="published" title="2014-07-26T18:30:00"> Sat 26 July 2014 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>Priority queue 有別於一般的 queue，每一個 element 都額外帶有優先值，愈優先的
+(一般來說是優先值愈低的) 放在愈前面。Priority queue 是一個 Abstract Data Type，
+有許多不同的實作方法，以 array 或 linked list 實作的時間複雜度如下表，</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Insertion</th>
+      <th>Removal</th>
+      <th>Construction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>array or linked list</td>
+      <td>$O(n)$</td>
+      <td>$O(1)$</td>
+      <td>$O(n^2)$</td>
+    </tr>
+  </tbody>
+</table>
 
+<h3>Binary Search Tree</h3>
+<p>Priority queue 也可以用 binary search tree 來實作，前提是必須是一棵
+self-balancing binary ...</p><script type= "text/javascript">
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+</script>
+ </div><!-- /.entry-content -->
 
-<p>來查看目前terminal的寬度(字元數)</p>
-<p>bash藉由這個變數來決定哪個位置該wrap，改變terminal大小時，通常這個值也會跟著改
-變，但有時候就會有靈異現象，造成terminal大小改變，但COLUMNS的值卻沒有改變</p>
-<p>bash的一個built-in command shopt，或許可以解決這個問題，shopt中有一個選項
-checkwinsize，會在每次做完一個指令後檢查terminal的大小，並視情況更新LINES &amp;
-COLUMNS，可以把他加在 ~/.bashrc 裡面</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">shopt</span> -s checkwinsize
-</pre></div>
-
-
-<p>至於效果如何，需要再觀察看看囉</p>
-<p>Reference:<br />
-<a href="http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin">Bash Reference Manual</a></p> </div><!-- /.entry-content -->
-
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/" rel="bookmark" title="Permalink to bash wrapping 位置錯誤">Read more <i class="icon-arrow-right"></i></a></div>
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="bookmark" title="Permalink to 來複習一下資料結構 - Priority Queue">Read more <i class="icon-arrow-right"></i></a></div>
 
 
 
 								<div class="row tag-row">
 										<span>Tagged as : </span>
-											<a class="danger label" href="http://blog.lance.tw/tag/bash.html">Bash</a>
+											<a class="danger label" href="http://blog.lance.tw/tag/data-structure.html">Data structure</a>
 								</div>
 
 
@@ -122,16 +159,17 @@ COLUMNS，可以把他加在 ~/.bashrc 裡面</p>
 
 <h4>Tags</h4>
 	<ul>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/data-structure.html">Data structure</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
 </ul>
 
 
@@ -139,8 +177,7 @@ COLUMNS，可以把他加在 ~/.bashrc 裡面</p>
 </div> </div><!-- /.row -->
 
 <p class="paginator">
-            <a href="http://blog.lance.tw/author/lance2.html"><i class="icon-arrow-left"></i></a>
-    Page 3 / 3
+    Page 1 / 1
 </p>
 </section><!-- /#content -->
 

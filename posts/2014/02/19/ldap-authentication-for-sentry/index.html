@@ -74,7 +74,7 @@
                 Wed 19 February 2014
               </abbr>
               <address class="vcard author">
-                By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a>
+                By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a>
               </address>
             </footer><!-- /.post-info -->
             <div class="entry-content">
@@ -120,7 +120,14 @@ AUTHENTICATION_BACKENDS = (
 # Preserve original database auth backend and social auth backends.
 # AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS + (
 #     'django_auth_ldap.backend.LDAPBackend',
-# )</code></pre>
+# )
+
+# To be able to create projects/teams, is_superuser flag is needed.
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#     "is_active": "cn=active,ou=Group,dc=example,dc=com",
+#     "is_staff": "cn=staff,ou=Group,dc=example,dc=com",
+#     "is_superuser": "cn=superuser,ou=Group,dc=example,dc=com"
+# }</code></pre>
     </noscript>
 </div>
             </div><!-- /.entry-content -->
@@ -157,16 +164,17 @@ AUTHENTICATION_BACKENDS = (
 
 <h4>Tags</h4>
 	<ul>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/data-structure.html">Data structure</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
 </ul>
 
 

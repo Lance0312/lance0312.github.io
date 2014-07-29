@@ -74,7 +74,7 @@
                 Wed 22 August 2012
               </abbr>
               <address class="vcard author">
-                By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a>
+                By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a>
               </address>
             </footer><!-- /.post-info -->
             <div class="entry-content">
@@ -167,42 +167,48 @@
 
 
 <h4>/etc/rc.conf</h4>
-<div class="gist">
-    <script src='https://gist.github.com/3428614.js?file=rc.conf'></script>
-    <noscript>
-        <pre><code>hostname="your.domain.name"
-ifconfig_em0="inet 192.168.0.123/24"
-defaultrouter="192.168.0.254"
-# ipv6 autoconf
-ifconfig_em0_ipv6="inet6 accept_rtadv"
-sshd_enable="YES"
-ntpd_enable="YES"
-ntpd_sync_on_host="YES"</code></pre>
-    </noscript>
-</div>
+<p>[gist:id=3428614,file=rc.conf]</p>
 <h4>/etc/fstab</h4>
-<div class="gist">
-    <script src='https://gist.github.com/3428614.js?file=fstab'></script>
-    <noscript>
-        <pre><code>/dev/mirror/gm0 / ufs rw 1 1
-/dev/gpt/swap0 none swap sw 0 0
-/dev/gpt/swap1 none swap sw 0 0</code></pre>
-    </noscript>
-</div>
+<p>[gist:id=3428614,file=fstab]</p>
 <h4>/boot/loader.conf</h4>
-<div class="gist">
-    <script src='https://gist.github.com/3428614.js?file=loader.conf'></script>
-    <noscript>
-        <pre><code>geom_mirror_load="YES"</code></pre>
-    </noscript>
-</div>
+<p>[gist:id=3428614,file=loader.conf]</p>
 <h2>大功告成</h2>
 <div class="highlight"><pre><span class="nv">$ </span><span class="nb">exit</span>
 <span class="nv">$ </span>reboot
 </pre></div>
 
 
-<p>大致步驟如上，至於zfs以及ports的部份，再說!</p>
+<p>大致步驟如上，至於zfs以及ports的部份，再說!</p><script type= "text/javascript">
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+</script>
+
             </div><!-- /.entry-content -->
             <div class="comments">
               <h3>Comments</h3>
@@ -237,16 +243,17 @@ ntpd_sync_on_host="YES"</code></pre>
 
 <h4>Tags</h4>
 	<ul>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/data-structure.html">Data structure</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
 </ul>
 
 

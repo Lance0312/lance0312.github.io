@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-        <title>Git: Smart Http with LDAP Auth</title>
+        <title>來複習一下資料結構 - Priority Queue</title>
         <meta charset="utf-8" />
         <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
         <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
@@ -65,74 +65,145 @@
 
             <header>
               <h2 class="entry-title">
-                <a href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="bookmark"
-                   title="Permalink to Git: Smart Http with LDAP Auth">Git: Smart Http with LDAP Auth</a></h2>
+                <a href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="bookmark"
+                   title="Permalink to 來複習一下資料結構 - Priority Queue">來複習一下資料結構 - Priority Queue</a></h2>
            
             </header>
             <footer class="post-info">
-              <abbr class="published" title="2012-08-04T02:28:00">
-                Sat 04 August 2012
+              <abbr class="published" title="2014-07-26T18:30:00">
+                Sat 26 July 2014
               </abbr>
               <address class="vcard author">
                 By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a>
               </address>
             </footer><!-- /.post-info -->
             <div class="entry-content">
-              <p>過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
-svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...</p>
-<h2>How To</h2>
-<p>以下是一個基本的virtual host設定，</p>
-<p>[gist:id=3250315]</p>
-<p>使用的情境是這樣的，當使用者clone了某個repository時，apache會要求輸入帳號密碼，
-並將帳號密碼拿去ldaps://your.ldap.server這台ldap server上作認證</p>
-<div class="highlight"><pre><span class="nv">$ </span>git clone http://your.domain.name/git/testing.git
-Username <span class="k">for</span> <span class="s1">&#39;http://your.domain.name&#39;</span>: username
-Password <span class="k">for</span> <span class="s1">&#39;http://username@your.domain.name&#39;</span>:
-...
-Unpacking objects: 100% <span class="o">(</span>??/??<span class="o">)</span>, <span class="k">done</span>.
-</pre></div>
+              <p>Priority queue 有別於一般的 queue，每一個 element 都額外帶有優先值，愈優先的
+(一般來說是優先值愈低的) 放在愈前面。Priority queue 是一個 Abstract Data Type，
+有許多不同的實作方法，以 array 或 linked list 實作的時間複雜度如下表，</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Insertion</th>
+      <th>Removal</th>
+      <th>Construction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>array or linked list</td>
+      <td>$O(n)$</td>
+      <td>$O(1)$</td>
+      <td>$O(n^2)$</td>
+    </tr>
+  </tbody>
+</table>
 
+<h3>Binary Search Tree</h3>
+<p>Priority queue 也可以用 binary search tree 來實作，前提是必須是一棵
+self-balancing binary search tree，否則效果可能會很差，例如長成一棵
+degenerate tree (每個 node 皆只有一個 child)，幾乎可以看作是一個 linked list。
+以 self-balancing BST 實作的時間複雜度如下表，</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Insertion</th>
+      <th>Removal</th>
+      <th>Construction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>array or linked list</td>
+      <td>$O(n)$</td>
+      <td>$O(1)$</td>
+      <td>$O(n^2)$</td>
+    </tr>
+    <tr>
+      <td>self-balancing BST</td>
+      <td>$O(logn)$</td>
+      <td>$O(logn)$</td>
+      <td>$O(nlogn)$</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>同樣的，當<code>git push</code>時，apache也會向使用者要求帳號密碼</p>
-<p>有幾點需要注意</p>
+<h3>Heap</h3>
+<p>最常用來實作 priority queue 莫過於 heap，heap 是一種樹狀的資料結構，當每一個
+parent nodes 都大於 child nodes 時，稱為 max heap，反之，則稱為 min heap。
+Heap 中又以 binary heap 最常見，binary heap 由兩個特性構成</p>
+<ol>
+<li>complete binary tree</li>
+<li>上述的 heap 特性</li>
+</ol>
+<p>以 binary heap 實作的時間複雜度如下表，要特別注意的是，若以一般建 tree 的方式來
+建 binary heap，時間複雜度其實是 $O(nlogn)$，但若以 bottom-up 的方式 heapify，
+則可以壓在 $O(n)$ 以內，大致上的概念如下，細節可以參考 <a href="http://en.wikipedia.org/wiki/Binary_heap#Building_a_heap">這個</a> 和 <a href="http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf">這個</a></p>
+<ol>
+<li>第 $h$ 層，最多需作 $2^h * 0$  次 heapify</li>
+<li>第 $h - 1$ 層，最多需作 $2^{h-1} * 1$ 次 heapify</li>
+<li>第 $h - 2$ 層，最多需作 $2^{h-2} * 2$ 次 heapify</li>
+<li>第 $h - i$ 層，最多需作 $2^{h-i} * i$ 次 heapify</li>
+<li>第 $h - h$ 層，最多需作 $2^{h-h} * h$ 次 heapify</li>
+</ol>
+<p>總共所需的 heapify 次數為
+$\sum_{i=0}^{h} i2^{h-i}
+= \sum_{i=0}^{h} i\frac{2^h}{2^i}
+= 2^h\sum_{i=0}^{h} \frac{i}{2^i}
+\leq 2^h\sum_{i=0}^{\infty} \frac{i}{2^i}
+\leq 2^h * 2
+= 2^{h+1} \in O(n)$</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Insertion</th>
+      <th>Removal</th>
+      <th>Construction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>array or linked list</td>
+      <td>$O(n)$</td>
+      <td>$O(1)$</td>
+      <td>$O(n^2)$</td>
+    </tr>
+    <tr>
+      <td>self-balancing BST</td>
+      <td>$O(logn)$</td>
+      <td>$O(logn)$</td>
+      <td>$O(nlogn)$</td>
+    </tr>
+    <tr>
+      <td>binary heap</td>
+      <td>$O(logn)$</td>
+      <td>$O(logn)$</td>
+      <td>$O(n)$</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Heap 常以 array 的方式儲存，下圖是一個 complete binary tree 以 array 儲存的示
+意，$ith$ node 的 children 和 parent 可以很容易的算出來</p>
 <ul>
-<li>git bare repositories放在<code>/opt/git</code>下，ex. <code>/opt/git/testing.git</code></li>
-<li>http://your.domain.name/git/testing.git 對應到 <code>/opt/git/testing.git</code></li>
-<li>由於ldap server用的是self-signed certificate，所以用<code>LDAPVerifyServerCert off</code>
-  暫時略過檢查</li>
+<li>children: $2i + 1, 2i + 2$</li>
+<li>parent: $\lfloor \frac{i - 1}{2} \rfloor$</li>
 </ul>
-<p>基本的設定都可以在<a href="http://www.kernel.org/pub/software/scm/git/docs/git-http-backend.html" title="git-http-backend man page">git-http-backend man page</a>中找到</p>
-<h2>Situation</h2>
-<p>man page中有一段snippet長這個樣子，</p>
-<div class="highlight"><pre><span class="nt">&lt;LocationMatch</span> <span class="s">&quot;^/git/.*/git-receive-pack$&quot;</span><span class="nt">&gt;</span>
-    ...
-<span class="nt">&lt;/LocationMatch&gt;</span>
-</pre></div>
-
-
-<p>上面說，你可以藉此達到<code>git clone</code>時不認證，<code>git push</code>時才認證的的效果，這正是我想要的東西，但我試了千萬遍依舊不成功...orz</p>
-<div class="highlight"><pre><span class="nv">$ </span>git push
-error: Cannot access URL http://your.domain.name/git/test.git/, <span class="k">return </span>code 22
-fatal: git-http-push failed
-</pre></div>
-
-
-<p>要知道為什麼失敗，先來看一下正常的<code>git push</code>在apache上留下了什麼log</p>
-<div class="highlight"><pre><span class="o">-</span> <span class="p">[</span><span class="mo">04</span><span class="o">/</span><span class="n">Aug</span><span class="o">/</span><span class="mi">2012</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">19</span><span class="o">:</span><span class="mi">34</span> <span class="o">+</span><span class="mi">0800</span><span class="p">]</span> <span class="s">&quot;GET /git/test.git/info/refs?service=git-receive-pack HTTP/1.1&quot;</span>
-<span class="o">-</span> <span class="p">[</span><span class="mo">04</span><span class="o">/</span><span class="n">Aug</span><span class="o">/</span><span class="mi">2012</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">19</span><span class="o">:</span><span class="mi">38</span> <span class="o">+</span><span class="mi">0800</span><span class="p">]</span> <span class="s">&quot;GET /git/test.git/info/refs?service=git-receive-pack HTTP/1.1&quot;</span>
-<span class="n">username</span> <span class="p">[</span><span class="mo">04</span><span class="o">/</span><span class="n">Aug</span><span class="o">/</span><span class="mi">2012</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">19</span><span class="o">:</span><span class="mi">38</span> <span class="o">+</span><span class="mi">0800</span><span class="p">]</span> <span class="s">&quot;GET /git/test.git/info/refs?service=git-receive-pack HTTP/1.1&quot;</span>
-<span class="n">username</span> <span class="p">[</span><span class="mo">04</span><span class="o">/</span><span class="n">Aug</span><span class="o">/</span><span class="mi">2012</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">19</span><span class="o">:</span><span class="mi">38</span> <span class="o">+</span><span class="mi">0800</span><span class="p">]</span> <span class="s">&quot;POST /git/test.git/git-receive-pack HTTP/1.1&quot;</span>
-</pre></div>
-
-
-<p>在真正送出POST前，會先送幾次GET，而且在最後一次GET時，已經<strong>通過</strong>LDAP認證，<br />
-再回來看看我們的設定
-    <LocationMatch "^/git/.*/git-receive-pack$">
-翻譯成中文就是，當我們的<code>Location</code>符合<code>^/git/.*/git-receive-pack$</code>這段regex時，
-就<strong>開始</strong>作LDAP認證，這聽起來不像是有問題的樣子，但悲慘的是，LocationMatch不吃
-query string，所以跟本認不得request裡面有git-receive-pack的字眼，Shawn O. Pearce
-在<a href="http://lists-archives.com/git/714311-git-http-backend-and-authenticated-pushes.html" title="Re: git-http-backend and Authenticated Pushes">mailing list</a>上有對這個問題說明，並提供了一段patch</p>
-<p>結論很簡單，大家還是多打幾次密碼吧XD，最好的辦法還是捨棄http，改用ssh key :p</p><script type= "text/javascript">
+<p><img alt="A complete binary tree stored in an array" src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Binary_tree_in_array.svg/370px-Binary_tree_in_array.svg.png" /></p>
+<p>本來想找找 linux kernel 裡面使用到 heap 的部份出來看，翻了一下
+<a href="http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed">cstheory.stackexchange.com 上有名的討論串</a>，發現似乎只有 cgroup 有用到，而
+且還是 reference kernel 2.6 的 source code，在 master branch 找了一下卻沒找到，
+才發現原來<a href="https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/?id=889ed9ceaa97bb02bf5d7349e24639f7fc5f4fa0">在今年年初被拔掉了</a>，不過 heap library 還在，可以參考
+<a href="https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/tree/lib/prio_heap.c?id=889ed9ceaa97bb02bf5d7349e24639f7fc5f4fa0">prio_heap.c</a> 和 <a href="https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/tree/include/linux/prio_heap.h?id=889ed9ceaa97bb02bf5d7349e24639f7fc5f4fa0">prio_heap.h</a>。</p>
+<h3>References</h3>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Priority_queue">Wikipedia - Priority Queue</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Heap_(data_structure)">Wikipedia - Heap</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Binary_heap">Wikipedia - Binary Heap</a></li>
+</ul><script type= "text/javascript">
     if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
         var mathjaxscript = document.createElement('script');
         mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
@@ -168,7 +239,7 @@ query string，所以跟本認不得request裡面有git-receive-pack的字眼，
               <h3>Comments</h3>
               <div id="disqus_thread"></div>
               <script type="text/javascript">
-                var disqus_identifier = "posts/2012/08/04/git-smart-http-with-ldap-auth/";
+                var disqus_identifier = "posts/2014/07/26/basic-data-structure-priority-queue/";
                 (function() {
                 var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
                 dsq.src = 'http://bloglancetw.disqus.com/embed.js';

@@ -69,33 +69,23 @@
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Git: Smart Http with LDAP Auth</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-08-04T02:28:00"> Sat 04 August 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
 svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...</p>
 <h2>How To</h2>
 <p>以下是一個基本的virtual host設定，</p>
-<div class="gist">
-    <script src='https://gist.github.com/3250315.js'></script>
-    <noscript>
-        <pre><code><VirtualHost *:80>
-    ServerName your.domain.name
-    DocumentRoot /srv/http
+<p>[gist:id=3250315]</p>
+<p>使用的情境是這樣的，當使用者clone了某個repository時，apache會要求輸入帳號密碼，
+並將帳號密碼拿去ldaps://your.ldap.server這台ldap server上作認證</p>
+<div class="highlight"><pre><span class="nv">$ </span>git clone http://your.domain.name/git/testing.git
+Username <span class="k">for</span> <span class="s1">&#39;http://your.domain.name&#39;</span>: username
+Password <span class="k">for</span> <span class="s1">&#39;http://username@your.domain.name&#39;</span>:
+...
+Unpacking objects: 100% <span class="o">(</span>??/??<span class="o">)</span>, <span class="k">done</span>.
+</pre></div>
 
-    setEnv GIT_PROJECT_ROOT /opt/git
-    setEnv GIT_HTTP_EXPORT_ALL
-    scriptAlias /git/ /usr/lib/git-core/git-http-backend/
 
-    <Directory />
-        Order allow,deny
-        Allow from all
-    </Directory>
-
-    <LocationMatch "/git/">
-        AuthName "GIT"
-        AuthType Basic
-        AuthBasicProvider ldap
-        AuthzLDAPAuthoritative off
-        AuthLDAPURL "ldaps://your.ldap.server/ou ...</locationmatch></virtualhost></code></pre></noscript></div> </div><!-- /.entry-content -->
+<p>同樣的 ...</p> </div><!-- /.entry-content -->
 
 								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Read more <i class="icon-arrow-right"></i></a></div>
 
@@ -113,7 +103,7 @@ svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git�
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/05/04/git-stash-how-to/" rel="bookmark" title="Permalink to Git stash how to">Git stash how to</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-05-04T17:33:00"> Fri 04 May 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
 整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
 commit時，我想到我還有台laptop...</p>
@@ -160,16 +150,17 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 
 <h4>Tags</h4>
 	<ul>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/data-structure.html">Data structure</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
 </ul>
 
 

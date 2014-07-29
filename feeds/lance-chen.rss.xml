@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/posts.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2014-07-26T18:30:00+08:00</updated><entry><title>來複習一下資料結構 - Priority Queue</title><link href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="alternate"></link><updated>2014-07-26T18:30:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2014-07-26:posts/2014/07/26/basic-data-structure-priority-queue/</id><summary type="html">&lt;p&gt;Priority queue 有別於一般的 queue，每一個 element 都額外帶有優先值，愈優先的
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Lance's blog</title><link>http://blog.lance.tw/</link><description></description><atom:link href="http://blog.lance.tw/feeds/lance-chen.rss.xml" rel="self"></atom:link><lastBuildDate>Sat, 26 Jul 2014 18:30:00 +0800</lastBuildDate><item><title>來複習一下資料結構 - Priority Queue</title><link>http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/</link><description>&lt;p&gt;Priority queue 有別於一般的 queue，每一個 element 都額外帶有優先值，愈優先的
 (一般來說是優先值愈低的) 放在愈前面。Priority queue 是一個 Abstract Data Type，
 有許多不同的實作方法，以 array 或 linked list 實作的時間複雜度如下表，&lt;/p&gt;
 &lt;table class="table"&gt;
@@ -154,7 +154,7 @@ $\sum_{i=0}^{h} i2^{h-i}
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="Data structure"></category></entry><entry><title>LDAP Authentication for Sentry</title><link href="http://blog.lance.tw/posts/2014/02/19/ldap-authentication-for-sentry/" rel="alternate"></link><updated>2014-02-19T18:30:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2014-02-19:posts/2014/02/19/ldap-authentication-for-sentry/</id><summary type="html">&lt;p&gt;&lt;a href="https://getsentry.com"&gt;Sentry&lt;/a&gt; is an awesome error logging platform for
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Sat, 26 Jul 2014 18:30:00 +0800</pubDate><guid>tag:blog.lance.tw,2014-07-26:posts/2014/07/26/basic-data-structure-priority-queue/</guid><category>Data structure</category></item><item><title>LDAP Authentication for Sentry</title><link>http://blog.lance.tw/posts/2014/02/19/ldap-authentication-for-sentry/</link><description>&lt;p&gt;&lt;a href="https://getsentry.com"&gt;Sentry&lt;/a&gt; is an awesome error logging platform for
 various language platforms and web frameworks. And it also supports several
 social authentication backends, including Twitter, Facebook, Google, Github,
 Trello and Bitbucket. However, if you are trying to set up Sentry for a
@@ -205,7 +205,7 @@ AUTHENTICATION_BACKENDS = (
 #     "is_superuser": "cn=superuser,ou=Group,dc=example,dc=com"
 # }&lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
-&lt;/div&gt;</summary><category term="Python"></category><category term="Django"></category><category term="Sentry"></category></entry><entry><title>Attach mails as attachments in Mutt</title><link href="http://blog.lance.tw/posts/2013/08/24/attach-mails-as-attachments-in-mutt/" rel="alternate"></link><updated>2013-08-24T16:04:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2013-08-24:posts/2013/08/24/attach-mails-as-attachments-in-mutt/</id><summary type="html">&lt;p&gt;We all know how to attach a file as an attachment in Mutt. Just press &lt;code&gt;a&lt;/code&gt; in
+&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Wed, 19 Feb 2014 18:30:00 +0800</pubDate><guid>tag:blog.lance.tw,2014-02-19:posts/2014/02/19/ldap-authentication-for-sentry/</guid><category>Python</category><category>Django</category><category>Sentry</category></item><item><title>Attach mails as attachments in Mutt</title><link>http://blog.lance.tw/posts/2013/08/24/attach-mails-as-attachments-in-mutt/</link><description>&lt;p&gt;We all know how to attach a file as an attachment in Mutt. Just press &lt;code&gt;a&lt;/code&gt; in
 &lt;a href="http://dev.mutt.org/trac/wiki/MuttGuide/Actions#primarymodes" title="MuttGuide/Actions"&gt;attach mode&lt;/a&gt;, and either type the file name or press &lt;code&gt;?&lt;/code&gt; to open up a file
 list.&lt;/p&gt;
 &lt;p&gt;But what to do when it comes to attaching a mail or even mails? For a single
@@ -221,7 +221,7 @@ up. You just need to press &lt;code&gt;t&lt;/code&gt; to tag any messages you wa
 attachment list.&lt;/p&gt;
 &lt;p&gt;Moreover, you can press &lt;code&gt;^D&lt;/code&gt; on a message to toggle it between inline and attachment.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;     &lt;span class="n"&gt;toggle&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;disposition&lt;/span&gt;              &lt;span class="n"&gt;toggle&lt;/span&gt; &lt;span class="n"&gt;disposition&lt;/span&gt; &lt;span class="n"&gt;between&lt;/span&gt; &lt;span class="kr"&gt;inline&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;attachment&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="Mutt"></category></entry><entry><title>Installing Archlinux on GPT and Software RAID</title><link href="http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/" rel="alternate"></link><updated>2012-08-31T14:54:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-08-31:posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/</id><summary type="html">&lt;p&gt;昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Sat, 24 Aug 2013 16:04:00 +0800</pubDate><guid>tag:blog.lance.tw,2013-08-24:posts/2013/08/24/attach-mails-as-attachments-in-mutt/</guid><category>Mutt</category></item><item><title>Installing Archlinux on GPT and Software RAID</title><link>http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/</link><description>&lt;p&gt;昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...&lt;/p&gt;
 &lt;p&gt;在官方&lt;a href="http://www.archlinux.org/news/install-media-20120715-released/"&gt;捨棄AIF(the Arch Installation Framework)&lt;/a&gt;，並以&lt;a href="http://www.archlinux.org/news/install-media-20120804-available/"&gt;GRUB2取代GRUB legacy&lt;/a&gt;後，
 安裝流程對我們所需的環境變得友善多了。&lt;/p&gt;
 &lt;hr /&gt;
@@ -362,7 +362,7 @@ Number  Start &lt;span class="o"&gt;(&lt;/span&gt;sector&lt;span class="o"&gt;)&
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="Archlinux"></category></entry><entry><title>Manually Install FreeBSD 9.0 Release on GPT and Gmirror</title><link href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="alternate"></link><updated>2012-08-22T17:50:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-08-22:posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/</id><summary type="html">&lt;p&gt;新學期、新組別、新測試機&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Fri, 31 Aug 2012 14:54:00 +0800</pubDate><guid>tag:blog.lance.tw,2012-08-31:posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/</guid><category>Archlinux</category></item><item><title>Manually Install FreeBSD 9.0 Release on GPT and Gmirror</title><link>http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/</link><description>&lt;p&gt;新學期、新組別、新測試機&lt;/p&gt;
 &lt;p&gt;FreeBSD branch: &lt;a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso"&gt;FreeBSD 9.0 Release&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;準備安裝環境&lt;/h2&gt;
 &lt;p&gt;依照你的環境，把installation media開起來，第一個畫面應該會像這樣
@@ -492,7 +492,7 @@ Number  Start &lt;span class="o"&gt;(&lt;/span&gt;sector&lt;span class="o"&gt;)&
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="FreeBSD"></category></entry><entry><title>Git: Smart Http with LDAP Auth</title><link href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="alternate"></link><updated>2012-08-04T02:28:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-08-04:posts/2012/08/04/git-smart-http-with-ldap-auth/</id><summary type="html">&lt;p&gt;過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Wed, 22 Aug 2012 17:50:00 +0800</pubDate><guid>tag:blog.lance.tw,2012-08-22:posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/</guid><category>FreeBSD</category></item><item><title>Git: Smart Http with LDAP Auth</title><link>http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/</link><description>&lt;p&gt;過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
 svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...&lt;/p&gt;
 &lt;h2&gt;How To&lt;/h2&gt;
 &lt;p&gt;以下是一個基本的virtual host設定，&lt;/p&gt;
@@ -576,7 +576,7 @@ query string，所以跟本認不得request裡面有git-receive-pack的字眼，
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="Git"></category></entry><entry><title>FreeBSD: Updating Gettext Breaks Vim and Svn</title><link href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="alternate"></link><updated>2012-07-27T02:12:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-07-27:posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/</id><summary type="html">&lt;p&gt;在一台FreeBSD 8.0-RELEASE上把&lt;code&gt;git&lt;/code&gt;跟&lt;code&gt;gitolite&lt;/code&gt;裝起來後，發現&lt;code&gt;vim&lt;/code&gt;跟&lt;code&gt;svn&lt;/code&gt;壞掉，&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Sat, 04 Aug 2012 02:28:00 +0800</pubDate><guid>tag:blog.lance.tw,2012-08-04:posts/2012/08/04/git-smart-http-with-ldap-auth/</guid><category>Git</category></item><item><title>FreeBSD: Updating Gettext Breaks Vim and Svn</title><link>http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/</link><description>&lt;p&gt;在一台FreeBSD 8.0-RELEASE上把&lt;code&gt;git&lt;/code&gt;跟&lt;code&gt;gitolite&lt;/code&gt;裝起來後，發現&lt;code&gt;vim&lt;/code&gt;跟&lt;code&gt;svn&lt;/code&gt;壞掉，&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;vim
 /libexec/ld-elf.so.1: Shared object &lt;span class="s2"&gt;&amp;quot;libintl.so.8&amp;quot;&lt;/span&gt; not found, required by &lt;span class="s2"&gt;&amp;quot;vim&amp;quot;&lt;/span&gt;
 &lt;span class="nv"&gt;$ &lt;/span&gt;svn
@@ -679,7 +679,7 @@ have had their PORTREVISIONs bumped.  If after upgrading:
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="FreeBSD"></category></entry><entry><title>Git stash how to</title><link href="http://blog.lance.tw/posts/2012/05/04/git-stash-how-to/" rel="alternate"></link><updated>2012-05-04T17:33:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/git-stash-how-to/</id><summary type="html">&lt;p&gt;故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Fri, 27 Jul 2012 02:12:00 +0800</pubDate><guid>tag:blog.lance.tw,2012-07-27:posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/</guid><category>FreeBSD</category></item><item><title>Git stash how to</title><link>http://blog.lance.tw/posts/2012/05/04/git-stash-how-to/</link><description>&lt;p&gt;故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
 整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
 commit時，我想到我還有台laptop...&lt;/p&gt;
 &lt;p&gt;laptop和pc的環境很不一樣，設定檔相對的也會有不少差別，所以我應該要開兩個branch，
@@ -756,7 +756,7 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="Git"></category></entry><entry><title>Vim: Delete lines that match a pattern</title><link href="http://blog.lance.tw/posts/2012/05/04/vim-delete-lines-that-match-a-pattern/" rel="alternate"></link><updated>2012-05-04T11:43:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/vim-delete-lines-that-match-a-pattern/</id><summary type="html">&lt;p&gt;Delete lines that match the pattern&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Fri, 04 May 2012 17:33:00 +0800</pubDate><guid>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/git-stash-how-to/</guid><category>Git</category></item><item><title>Vim: Delete lines that match a pattern</title><link>http://blog.lance.tw/posts/2012/05/04/vim-delete-lines-that-match-a-pattern/</link><description>&lt;p&gt;Delete lines that match the pattern&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;g&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -765,7 +765,7 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;  
 &lt;span class="n"&gt;or&lt;/span&gt;  
 &lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;g&lt;/span&gt;&lt;span class="o"&gt;!/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="Vim"></category></entry><entry><title>Calculate with command-line tool bc</title><link href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="alternate"></link><updated>2012-04-25T23:57:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-04-25:posts/2012/04/25/calculate-with-command-line-tool-bc/</id><summary type="html">&lt;p&gt;Basic usage&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Fri, 04 May 2012 11:43:00 +0800</pubDate><guid>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/vim-delete-lines-that-match-a-pattern/</guid><category>Vim</category></item><item><title>Calculate with command-line tool bc</title><link>http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/</link><description>&lt;p&gt;Basic usage&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;expr&amp;#39;&lt;/span&gt; | bc
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -803,7 +803,7 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="Cli"></category></entry><entry><title>Python: list assigning(copying)</title><link href="http://blog.lance.tw/posts/2011/12/17/python-list-assigningcopying/" rel="alternate"></link><updated>2011-12-17T11:49:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2011-12-17:posts/2011/12/17/python-list-assigningcopying/</id><summary type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Wed, 25 Apr 2012 23:57:00 +0800</pubDate><guid>tag:blog.lance.tw,2012-04-25:posts/2012/04/25/calculate-with-command-line-tool-bc/</guid><category>Cli</category></item><item><title>Python: list assigning(copying)</title><link>http://blog.lance.tw/posts/2011/12/17/python-list-assigningcopying/</link><description>&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
 &lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
 &lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
@@ -827,7 +827,7 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
 
 &lt;p&gt;module copy中又有copy與deepcopy，兩者的差別要再研究研究&lt;/p&gt;
 &lt;p&gt;Reference:&lt;br /&gt;
-&lt;a href="http://docs.python.org/library/copy.html"&gt;python module copy&lt;/a&gt;&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>bash wrapping 位置錯誤</title><link href="http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/" rel="alternate"></link><updated>2011-12-07T10:41:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2011-12-07:posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/</id><summary type="html">&lt;p&gt;在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用&lt;/p&gt;
+&lt;a href="http://docs.python.org/library/copy.html"&gt;python module copy&lt;/a&gt;&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Sat, 17 Dec 2011 11:49:00 +0800</pubDate><guid>tag:blog.lance.tw,2011-12-17:posts/2011/12/17/python-list-assigningcopying/</guid><category>Python</category></item><item><title>bash wrapping 位置錯誤</title><link>http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/</link><description>&lt;p&gt;在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$COLUMNS&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -874,4 +874,4 @@ COLUMNS，可以把他加在 ~/.bashrc 裡面&lt;/p&gt;
         (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
     }
 &lt;/script&gt;
-</summary><category term="Bash"></category></entry></feed>
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Lance Chen</dc:creator><pubDate>Wed, 07 Dec 2011 10:41:00 +0800</pubDate><guid>tag:blog.lance.tw,2011-12-07:posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/</guid><category>Bash</category></item></channel></rss>

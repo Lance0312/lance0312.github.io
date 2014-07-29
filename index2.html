@@ -66,10 +66,44 @@
         <div class="eleven columns">
 		         <ol id="post-list">
 				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Git: Smart Http with LDAP Auth</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-04T02:28:00"> Sat 04 August 2012 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
+svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...</p>
+<h2>How To</h2>
+<p>以下是一個基本的virtual host設定，</p>
+<p>[gist:id=3250315]</p>
+<p>使用的情境是這樣的，當使用者clone了某個repository時，apache會要求輸入帳號密碼，
+並將帳號密碼拿去ldaps://your.ldap.server這台ldap server上作認證</p>
+<div class="highlight"><pre><span class="nv">$ </span>git clone http://your.domain.name/git/testing.git
+Username <span class="k">for</span> <span class="s1">&#39;http://your.domain.name&#39;</span>: username
+Password <span class="k">for</span> <span class="s1">&#39;http://username@your.domain.name&#39;</span>:
+...
+Unpacking objects: 100% <span class="o">(</span>??/??<span class="o">)</span>, <span class="k">done</span>.
+</pre></div>
+
+
+<p>同樣的 ...</p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/git.html">Git</a>
+								</div>
+
+
+
+				        </article></li>
+				        <li><article class="hentry">
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="bookmark" title="Permalink to FreeBSD: Updating Gettext Breaks Vim and Svn">FreeBSD: Updating Gettext Breaks Vim and Svn</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-07-27T02:12:00"> Fri 27 July 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>在一台FreeBSD 8.0-RELEASE上把<code>git</code>跟<code>gitolite</code>裝起來後，發現<code>vim</code>跟<code>svn</code>壞掉，</p>
 <div class="highlight"><pre><span class="nv">$ </span>vim
 /libexec/ld-elf.so.1: Shared object <span class="s2">&quot;libintl.so.8&quot;</span> not found, required by <span class="s2">&quot;vim&quot;</span>
@@ -96,7 +130,7 @@
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/05/04/git-stash-how-to/" rel="bookmark" title="Permalink to Git stash how to">Git stash how to</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-05-04T17:33:00"> Fri 04 May 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
 整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
 commit時，我想到我還有台laptop...</p>
@@ -126,7 +160,7 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/05/04/vim-delete-lines-that-match-a-pattern/" rel="bookmark" title="Permalink to Vim: Delete lines that match a pattern">Vim: Delete lines that match a pattern</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-05-04T11:43:00"> Fri 04 May 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>Delete lines that match the pattern</p>
 <div class="highlight"><pre><span class="o">:</span><span class="n">g</span><span class="o">/</span><span class="n">pattern</span><span class="o">/</span><span class="n">d</span>
 </pre></div>
@@ -154,7 +188,7 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Calculate with command-line tool bc</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-04-25T23:57:00"> Wed 25 April 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
 				                <div class="entry-content"> <p>Basic usage</p>
 <div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;expr&#39;</span> | bc
 </pre></div>
@@ -163,7 +197,43 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 <p>Hex to Dec</p>
 <div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;ibase=16;obase=A;FF&#39;</span> | bc
 255
-</pre></div> </div><!-- /.entry-content -->
+</pre></div><script type= "text/javascript">
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML ...</script><script type= "text/javascript">
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+</script>
+ </div><!-- /.entry-content -->
 
 								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Read more <i class="icon-arrow-right"></i></a></div>
 
@@ -172,49 +242,6 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 								<div class="row tag-row">
 										<span>Tagged as : </span>
 											<a class="danger label" href="http://blog.lance.tw/tag/cli.html">Cli</a>
-								</div>
-
-
-
-				        </article></li>
-				        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2011/12/17/python-list-assigningcopying/" rel="bookmark" title="Permalink to Python: list assigning(copying)">Python: list assigning(copying)</a></h2> </header>
-				                <footer class="post-info">
-				                    <abbr class="published" title="2011-12-17T11:49:00"> Sat 17 December 2011 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance.html">Lance</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">a</span>
-<span class="go">[10,2,3,4,5]</span>
-</pre></div>
-
-
-<p>在python中，list的assign有點類似c的pointer，改變b的值同時也會改變a的值，要作到
-真正的copy有兩種方法：</p>
-<h3>slicing</h3>
-<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:]</span>
-</pre></div>
-
-
-<p>這個作法雖然簡單，但是在nested的結構中會有問題，可以改採用第二種方法</p>
-<h3>module copy</h3>
-<div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-</pre></div>
-
-
-<p>module copy中又有copy與deepcopy，兩者的差別要再研究研究</p>
-<p>Reference:<br />
-<a href="http://docs.python.org/library/copy.html">python module copy</a></p> </div><!-- /.entry-content -->
-
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2011/12/17/python-list-assigningcopying/" rel="bookmark" title="Permalink to Python: list assigning(copying)">Read more <i class="icon-arrow-right"></i></a></div>
-
-
-
-								<div class="row tag-row">
-										<span>Tagged as : </span>
-											<a class="danger label" href="http://blog.lance.tw/tag/python.html">Python</a>
 								</div>
 
 
@@ -241,16 +268,17 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 
 <h4>Tags</h4>
 	<ul>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/data-structure.html">Data structure</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
 </ul>
 
 

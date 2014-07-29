@@ -1,5 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/all.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2014-02-19T18:30:00+08:00</updated><entry><title>LDAP Authentication for Sentry</title><link href="http://blog.lance.tw/posts/2014/02/19/ldap-authentication-for-sentry/" rel="alternate"></link><updated>2014-02-19T18:30:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2014-02-19:posts/2014/02/19/ldap-authentication-for-sentry/</id><summary type="html">&lt;p&gt;&lt;a href="https://getsentry.com"&gt;Sentry&lt;/a&gt; is an awesome error logging platform for
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/all.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2014-07-26T18:30:00+08:00</updated><entry><title>來複習一下資料結構 - Priority Queue</title><link href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="alternate"></link><updated>2014-07-26T18:30:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2014-07-26:posts/2014/07/26/basic-data-structure-priority-queue/</id><summary type="html">&lt;p&gt;Priority queue 有別於一般的 queue，每一個 element 都額外帶有優先值，愈優先的
+(一般來說是優先值愈低的) 放在愈前面。Priority queue 是一個 Abstract Data Type，
+有許多不同的實作方法，以 array 或 linked list 實作的時間複雜度如下表，&lt;/p&gt;
+&lt;table class="table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Insertion&lt;/th&gt;
+      &lt;th&gt;Removal&lt;/th&gt;
+      &lt;th&gt;Construction&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;array or linked list&lt;/td&gt;
+      &lt;td&gt;$O(n)$&lt;/td&gt;
+      &lt;td&gt;$O(1)$&lt;/td&gt;
+      &lt;td&gt;$O(n^2)$&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3&gt;Binary Search Tree&lt;/h3&gt;
+&lt;p&gt;Priority queue 也可以用 binary search tree 來實作，前提是必須是一棵
+self-balancing binary search tree，否則效果可能會很差，例如長成一棵
+degenerate tree (每個 node 皆只有一個 child)，幾乎可以看作是一個 linked list。
+以 self-balancing BST 實作的時間複雜度如下表，&lt;/p&gt;
+&lt;table class="table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Insertion&lt;/th&gt;
+      &lt;th&gt;Removal&lt;/th&gt;
+      &lt;th&gt;Construction&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;array or linked list&lt;/td&gt;
+      &lt;td&gt;$O(n)$&lt;/td&gt;
+      &lt;td&gt;$O(1)$&lt;/td&gt;
+      &lt;td&gt;$O(n^2)$&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;self-balancing BST&lt;/td&gt;
+      &lt;td&gt;$O(logn)$&lt;/td&gt;
+      &lt;td&gt;$O(logn)$&lt;/td&gt;
+      &lt;td&gt;$O(nlogn)$&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3&gt;Heap&lt;/h3&gt;
+&lt;p&gt;最常用來實作 priority queue 莫過於 heap，heap 是一種樹狀的資料結構，當每一個
+parent nodes 都大於 child nodes 時，稱為 max heap，反之，則稱為 min heap。
+Heap 中又以 binary heap 最常見，binary heap 由兩個特性構成&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;complete binary tree&lt;/li&gt;
+&lt;li&gt;上述的 heap 特性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;以 binary heap 實作的時間複雜度如下表，要特別注意的是，若以一般建 tree 的方式來
+建 binary heap，時間複雜度其實是 $O(nlogn)$，但若以 bottom-up 的方式 heapify，
+則可以壓在 $O(n)$ 以內，大致上的概念如下，細節可以參考 &lt;a href="http://en.wikipedia.org/wiki/Binary_heap#Building_a_heap"&gt;這個&lt;/a&gt; 和 &lt;a href="http://www.cs.umd.edu/~meesh/351/mount/lectures/lect14-heapsort-analysis-part.pdf"&gt;這個&lt;/a&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;第 $h$ 層，最多需作 $2^h * 0$  次 heapify&lt;/li&gt;
+&lt;li&gt;第 $h - 1$ 層，最多需作 $2^{h-1} * 1$ 次 heapify&lt;/li&gt;
+&lt;li&gt;第 $h - 2$ 層，最多需作 $2^{h-2} * 2$ 次 heapify&lt;/li&gt;
+&lt;li&gt;第 $h - i$ 層，最多需作 $2^{h-i} * i$ 次 heapify&lt;/li&gt;
+&lt;li&gt;第 $h - h$ 層，最多需作 $2^{h-h} * h$ 次 heapify&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;總共所需的 heapify 次數為
+$\sum_{i=0}^{h} i2^{h-i}
+= \sum_{i=0}^{h} i\frac{2^h}{2^i}
+= 2^h\sum_{i=0}^{h} \frac{i}{2^i}
+\leq 2^h\sum_{i=0}^{\infty} \frac{i}{2^i}
+\leq 2^h * 2
+= 2^{h+1} \in O(n)$&lt;/p&gt;
+&lt;table class="table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Insertion&lt;/th&gt;
+      &lt;th&gt;Removal&lt;/th&gt;
+      &lt;th&gt;Construction&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;array or linked list&lt;/td&gt;
+      &lt;td&gt;$O(n)$&lt;/td&gt;
+      &lt;td&gt;$O(1)$&lt;/td&gt;
+      &lt;td&gt;$O(n^2)$&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;self-balancing BST&lt;/td&gt;
+      &lt;td&gt;$O(logn)$&lt;/td&gt;
+      &lt;td&gt;$O(logn)$&lt;/td&gt;
+      &lt;td&gt;$O(nlogn)$&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;binary heap&lt;/td&gt;
+      &lt;td&gt;$O(logn)$&lt;/td&gt;
+      &lt;td&gt;$O(logn)$&lt;/td&gt;
+      &lt;td&gt;$O(n)$&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Heap 常以 array 的方式儲存，下圖是一個 complete binary tree 以 array 儲存的示
+意，$ith$ node 的 children 和 parent 可以很容易的算出來&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;children: $2i + 1, 2i + 2$&lt;/li&gt;
+&lt;li&gt;parent: $\lfloor \frac{i - 1}{2} \rfloor$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="A complete binary tree stored in an array" src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Binary_tree_in_array.svg/370px-Binary_tree_in_array.svg.png" /&gt;&lt;/p&gt;
+&lt;p&gt;本來想找找 linux kernel 裡面使用到 heap 的部份出來看，翻了一下
+&lt;a href="http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed"&gt;cstheory.stackexchange.com 上有名的討論串&lt;/a&gt;，發現似乎只有 cgroup 有用到，而
+且還是 reference kernel 2.6 的 source code，在 master branch 找了一下卻沒找到，
+才發現原來&lt;a href="https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit/?id=889ed9ceaa97bb02bf5d7349e24639f7fc5f4fa0"&gt;在今年年初被拔掉了&lt;/a&gt;，不過 heap library 還在，可以參考
+&lt;a href="https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/tree/lib/prio_heap.c?id=889ed9ceaa97bb02bf5d7349e24639f7fc5f4fa0"&gt;prio_heap.c&lt;/a&gt; 和 &lt;a href="https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/tree/include/linux/prio_heap.h?id=889ed9ceaa97bb02bf5d7349e24639f7fc5f4fa0"&gt;prio_heap.h&lt;/a&gt;。&lt;/p&gt;
+&lt;h3&gt;References&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://en.wikipedia.org/wiki/Priority_queue"&gt;Wikipedia - Priority Queue&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://en.wikipedia.org/wiki/Heap_(data_structure)"&gt;Wikipedia - Heap&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://en.wikipedia.org/wiki/Binary_heap"&gt;Wikipedia - Binary Heap&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="Data structure"></category></entry><entry><title>LDAP Authentication for Sentry</title><link href="http://blog.lance.tw/posts/2014/02/19/ldap-authentication-for-sentry/" rel="alternate"></link><updated>2014-02-19T18:30:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2014-02-19:posts/2014/02/19/ldap-authentication-for-sentry/</id><summary type="html">&lt;p&gt;&lt;a href="https://getsentry.com"&gt;Sentry&lt;/a&gt; is an awesome error logging platform for
 various language platforms and web frameworks. And it also supports several
 social authentication backends, including Twitter, Facebook, Google, Github,
 Trello and Bitbucket. However, if you are trying to set up Sentry for a
@@ -41,9 +196,16 @@ AUTHENTICATION_BACKENDS = (
 # Preserve original database auth backend and social auth backends.
 # AUTHENTICATION_BACKENDS = AUTHENTICATION_BACKENDS + (
 #     'django_auth_ldap.backend.LDAPBackend',
-# )&lt;/code&gt;&lt;/pre&gt;
+# )
+
+# To be able to create projects/teams, is_superuser flag is needed.
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#     "is_active": "cn=active,ou=Group,dc=example,dc=com",
+#     "is_staff": "cn=staff,ou=Group,dc=example,dc=com",
+#     "is_superuser": "cn=superuser,ou=Group,dc=example,dc=com"
+# }&lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
-&lt;/div&gt;</summary><category term="Python"></category><category term="Django"></category><category term="Sentry"></category></entry><entry><title>Attach mails as attachments in Mutt</title><link href="http://blog.lance.tw/posts/2013/08/24/attach-mails-as-attachments-in-mutt/" rel="alternate"></link><updated>2013-08-24T16:04:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2013-08-24:posts/2013/08/24/attach-mails-as-attachments-in-mutt/</id><summary type="html">&lt;p&gt;We all know how to attach a file as an attachment in Mutt. Just press &lt;code&gt;a&lt;/code&gt; in
+&lt;/div&gt;</summary><category term="Python"></category><category term="Django"></category><category term="Sentry"></category></entry><entry><title>Attach mails as attachments in Mutt</title><link href="http://blog.lance.tw/posts/2013/08/24/attach-mails-as-attachments-in-mutt/" rel="alternate"></link><updated>2013-08-24T16:04:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2013-08-24:posts/2013/08/24/attach-mails-as-attachments-in-mutt/</id><summary type="html">&lt;p&gt;We all know how to attach a file as an attachment in Mutt. Just press &lt;code&gt;a&lt;/code&gt; in
 &lt;a href="http://dev.mutt.org/trac/wiki/MuttGuide/Actions#primarymodes" title="MuttGuide/Actions"&gt;attach mode&lt;/a&gt;, and either type the file name or press &lt;code&gt;?&lt;/code&gt; to open up a file
 list.&lt;/p&gt;
 &lt;p&gt;But what to do when it comes to attaching a mail or even mails? For a single
@@ -59,7 +221,7 @@ up. You just need to press &lt;code&gt;t&lt;/code&gt; to tag any messages you wa
 attachment list.&lt;/p&gt;
 &lt;p&gt;Moreover, you can press &lt;code&gt;^D&lt;/code&gt; on a message to toggle it between inline and attachment.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="n"&gt;D&lt;/span&gt;     &lt;span class="n"&gt;toggle&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;disposition&lt;/span&gt;              &lt;span class="n"&gt;toggle&lt;/span&gt; &lt;span class="n"&gt;disposition&lt;/span&gt; &lt;span class="n"&gt;between&lt;/span&gt; &lt;span class="kr"&gt;inline&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;attachment&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="Mutt"></category></entry><entry><title>Installing Archlinux on GPT and Software RAID</title><link href="http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/" rel="alternate"></link><updated>2012-08-31T14:54:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-31:posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/</id><summary type="html">&lt;p&gt;昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Mutt"></category></entry><entry><title>Installing Archlinux on GPT and Software RAID</title><link href="http://blog.lance.tw/posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/" rel="alternate"></link><updated>2012-08-31T14:54:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-08-31:posts/2012/08/31/installing-archlinux-on-gpt-and-software-raid/</id><summary type="html">&lt;p&gt;昨天組內投票決議後，我們維護的工作站由Gentoo改為Archlinux，不知道是件好事還是壞事...&lt;/p&gt;
 &lt;p&gt;在官方&lt;a href="http://www.archlinux.org/news/install-media-20120715-released/"&gt;捨棄AIF(the Arch Installation Framework)&lt;/a&gt;，並以&lt;a href="http://www.archlinux.org/news/install-media-20120804-available/"&gt;GRUB2取代GRUB legacy&lt;/a&gt;後，
 安裝流程對我們所需的環境變得友善多了。&lt;/p&gt;
 &lt;hr /&gt;
@@ -170,7 +332,37 @@ Number  Start &lt;span class="o"&gt;(&lt;/span&gt;sector&lt;span class="o"&gt;)&
 &lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/GPT"&gt;Arch wiki - GPT&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/Mkinitcpio#Using_RAID"&gt;Arch wiki - Mkinitcpio&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://wiki.archlinux.org/index.php/GRUB2#RAID"&gt;Arch wiki - GRUB2&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</summary><category term="Archlinux"></category></entry><entry><title>Manually Install FreeBSD 9.0 Release on GPT and Gmirror</title><link href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="alternate"></link><updated>2012-08-22T17:50:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-22:posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/</id><summary type="html">&lt;p&gt;新學期、新組別、新測試機&lt;/p&gt;
+&lt;/ol&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="Archlinux"></category></entry><entry><title>Manually Install FreeBSD 9.0 Release on GPT and Gmirror</title><link href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="alternate"></link><updated>2012-08-22T17:50:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-08-22:posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/</id><summary type="html">&lt;p&gt;新學期、新組別、新測試機&lt;/p&gt;
 &lt;p&gt;FreeBSD branch: &lt;a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso"&gt;FreeBSD 9.0 Release&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;準備安裝環境&lt;/h2&gt;
 &lt;p&gt;依照你的環境，把installation media開起來，第一個畫面應該會像這樣
@@ -259,73 +451,52 @@ Number  Start &lt;span class="o"&gt;(&lt;/span&gt;sector&lt;span class="o"&gt;)&
 
 
 &lt;h4&gt;/etc/rc.conf&lt;/h4&gt;
-&lt;div class="gist"&gt;
-    &lt;script src='https://gist.github.com/3428614.js?file=rc.conf'&gt;&lt;/script&gt;
-    &lt;noscript&gt;
-        &lt;pre&gt;&lt;code&gt;hostname="your.domain.name"
-ifconfig_em0="inet 192.168.0.123/24"
-defaultrouter="192.168.0.254"
-# ipv6 autoconf
-ifconfig_em0_ipv6="inet6 accept_rtadv"
-sshd_enable="YES"
-ntpd_enable="YES"
-ntpd_sync_on_host="YES"&lt;/code&gt;&lt;/pre&gt;
-    &lt;/noscript&gt;
-&lt;/div&gt;
+&lt;p&gt;[gist:id=3428614,file=rc.conf]&lt;/p&gt;
 &lt;h4&gt;/etc/fstab&lt;/h4&gt;
-&lt;div class="gist"&gt;
-    &lt;script src='https://gist.github.com/3428614.js?file=fstab'&gt;&lt;/script&gt;
-    &lt;noscript&gt;
-        &lt;pre&gt;&lt;code&gt;/dev/mirror/gm0 / ufs rw 1 1
-/dev/gpt/swap0 none swap sw 0 0
-/dev/gpt/swap1 none swap sw 0 0&lt;/code&gt;&lt;/pre&gt;
-    &lt;/noscript&gt;
-&lt;/div&gt;
+&lt;p&gt;[gist:id=3428614,file=fstab]&lt;/p&gt;
 &lt;h4&gt;/boot/loader.conf&lt;/h4&gt;
-&lt;div class="gist"&gt;
-    &lt;script src='https://gist.github.com/3428614.js?file=loader.conf'&gt;&lt;/script&gt;
-    &lt;noscript&gt;
-        &lt;pre&gt;&lt;code&gt;geom_mirror_load="YES"&lt;/code&gt;&lt;/pre&gt;
-    &lt;/noscript&gt;
-&lt;/div&gt;
+&lt;p&gt;[gist:id=3428614,file=loader.conf]&lt;/p&gt;
 &lt;h2&gt;大功告成&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;exit&lt;/span&gt;
 &lt;span class="nv"&gt;$ &lt;/span&gt;reboot
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;大致步驟如上，至於zfs以及ports的部份，再說!&lt;/p&gt;</summary><category term="FreeBSD"></category></entry><entry><title>Git: Smart Http with LDAP Auth</title><link href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="alternate"></link><updated>2012-08-04T02:28:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-08-04:posts/2012/08/04/git-smart-http-with-ldap-auth/</id><summary type="html">&lt;p&gt;過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
+&lt;p&gt;大致步驟如上，至於zfs以及ports的部份，再說!&lt;/p&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="FreeBSD"></category></entry><entry><title>Git: Smart Http with LDAP Auth</title><link href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="alternate"></link><updated>2012-08-04T02:28:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-08-04:posts/2012/08/04/git-smart-http-with-ldap-auth/</id><summary type="html">&lt;p&gt;過去工作上用svn，私底下用git，為了跟上潮流，打算在原本有的svn機器上架起git的服務，
 svn commit權限是透過LDAP來管理的，所以把這樣的功能apply到git上也是逃不掉的orz...&lt;/p&gt;
 &lt;h2&gt;How To&lt;/h2&gt;
 &lt;p&gt;以下是一個基本的virtual host設定，&lt;/p&gt;
-&lt;div class="gist"&gt;
-    &lt;script src='https://gist.github.com/3250315.js'&gt;&lt;/script&gt;
-    &lt;noscript&gt;
-        &lt;pre&gt;&lt;code&gt;&lt;VirtualHost *:80&gt;
-    ServerName your.domain.name
-    DocumentRoot /srv/http
-
-    setEnv GIT_PROJECT_ROOT /opt/git
-    setEnv GIT_HTTP_EXPORT_ALL
-    scriptAlias /git/ /usr/lib/git-core/git-http-backend/
-
-    &lt;Directory /&gt;
-        Order allow,deny
-        Allow from all
-    &lt;/Directory&gt;
-
-    &lt;LocationMatch "/git/"&gt;
-        AuthName "GIT"
-        AuthType Basic
-        AuthBasicProvider ldap
-        AuthzLDAPAuthoritative off
-        AuthLDAPURL "ldaps://your.ldap.server/ou=People,dc=cs,dc=nctu,dc=edu,dc=tw"
-        Require valid-user
-    &lt;/LocationMatch&gt;
-&lt;/VirtualHost&gt;
-LDAPVerifyServerCert off&lt;/code&gt;&lt;/pre&gt;
-    &lt;/noscript&gt;
-&lt;/div&gt;
+&lt;p&gt;[gist:id=3250315]&lt;/p&gt;
 &lt;p&gt;使用的情境是這樣的，當使用者clone了某個repository時，apache會要求輸入帳號密碼，
 並將帳號密碼拿去ldaps://your.ldap.server這台ldap server上作認證&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git clone http://your.domain.name/git/testing.git
@@ -375,7 +546,37 @@ fatal: git-http-push failed
 就&lt;strong&gt;開始&lt;/strong&gt;作LDAP認證，這聽起來不像是有問題的樣子，但悲慘的是，LocationMatch不吃
 query string，所以跟本認不得request裡面有git-receive-pack的字眼，Shawn O. Pearce
 在&lt;a href="http://lists-archives.com/git/714311-git-http-backend-and-authenticated-pushes.html" title="Re: git-http-backend and Authenticated Pushes"&gt;mailing list&lt;/a&gt;上有對這個問題說明，並提供了一段patch&lt;/p&gt;
-&lt;p&gt;結論很簡單，大家還是多打幾次密碼吧XD，最好的辦法還是捨棄http，改用ssh key :p&lt;/p&gt;</summary><category term="Git"></category></entry><entry><title>FreeBSD: Updating Gettext Breaks Vim and Svn</title><link href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="alternate"></link><updated>2012-07-27T02:12:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-07-27:posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/</id><summary type="html">&lt;p&gt;在一台FreeBSD 8.0-RELEASE上把&lt;code&gt;git&lt;/code&gt;跟&lt;code&gt;gitolite&lt;/code&gt;裝起來後，發現&lt;code&gt;vim&lt;/code&gt;跟&lt;code&gt;svn&lt;/code&gt;壞掉，&lt;/p&gt;
+&lt;p&gt;結論很簡單，大家還是多打幾次密碼吧XD，最好的辦法還是捨棄http，改用ssh key :p&lt;/p&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="Git"></category></entry><entry><title>FreeBSD: Updating Gettext Breaks Vim and Svn</title><link href="http://blog.lance.tw/posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/" rel="alternate"></link><updated>2012-07-27T02:12:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-07-27:posts/2012/07/27/freebsd-updating-gettext-breaks-vim-and-svn/</id><summary type="html">&lt;p&gt;在一台FreeBSD 8.0-RELEASE上把&lt;code&gt;git&lt;/code&gt;跟&lt;code&gt;gitolite&lt;/code&gt;裝起來後，發現&lt;code&gt;vim&lt;/code&gt;跟&lt;code&gt;svn&lt;/code&gt;壞掉，&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;vim
 /libexec/ld-elf.so.1: Shared object &lt;span class="s2"&gt;&amp;quot;libintl.so.8&amp;quot;&lt;/span&gt; not found, required by &lt;span class="s2"&gt;&amp;quot;vim&amp;quot;&lt;/span&gt;
 &lt;span class="nv"&gt;$ &lt;/span&gt;svn
@@ -448,7 +649,37 @@ have had their PORTREVISIONs bumped.  If after upgrading:
 
 
 &lt;p&gt;用portmaster把depend gettext的ports全部重編一次就ok了，不過這樣會不會又升爛其他
-東西阿...XD&lt;/p&gt;</summary><category term="FreeBSD"></category></entry><entry><title>Git stash how to</title><link href="http://blog.lance.tw/posts/2012/05/04/git-stash-how-to/" rel="alternate"></link><updated>2012-05-04T17:33:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/git-stash-how-to/</id><summary type="html">&lt;p&gt;故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
+東西阿...XD&lt;/p&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="FreeBSD"></category></entry><entry><title>Git stash how to</title><link href="http://blog.lance.tw/posts/2012/05/04/git-stash-how-to/" rel="alternate"></link><updated>2012-05-04T17:33:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/git-stash-how-to/</id><summary type="html">&lt;p&gt;故事是這樣的，我在github上開了一個repo打算拿來放系統上的設定檔，我把一些設定檔
 整理好並加了一些README，以防以後痴呆了，忘記設定檔該放在哪裡，就在我準備要
 commit時，我想到我還有台laptop...&lt;/p&gt;
 &lt;p&gt;laptop和pc的環境很不一樣，設定檔相對的也會有不少差別，所以我應該要開兩個branch，
@@ -495,7 +726,37 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;code&gt;git stash pop&lt;/code&gt;有可能會遇到conflict的狀況，哪天遇到了再回來補充...&lt;/p&gt;</summary><category term="Git"></category></entry><entry><title>Vim: Delete lines that match a pattern</title><link href="http://blog.lance.tw/posts/2012/05/04/vim-delete-lines-that-match-a-pattern/" rel="alternate"></link><updated>2012-05-04T11:43:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/vim-delete-lines-that-match-a-pattern/</id><summary type="html">&lt;p&gt;Delete lines that match the pattern&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git stash pop&lt;/code&gt;有可能會遇到conflict的狀況，哪天遇到了再回來補充...&lt;/p&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="Git"></category></entry><entry><title>Vim: Delete lines that match a pattern</title><link href="http://blog.lance.tw/posts/2012/05/04/vim-delete-lines-that-match-a-pattern/" rel="alternate"></link><updated>2012-05-04T11:43:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-05-04:posts/2012/05/04/vim-delete-lines-that-match-a-pattern/</id><summary type="html">&lt;p&gt;Delete lines that match the pattern&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;g&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -504,7 +765,7 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;  
 &lt;span class="n"&gt;or&lt;/span&gt;  
 &lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;g&lt;/span&gt;&lt;span class="o"&gt;!/&lt;/span&gt;&lt;span class="n"&gt;pattern&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;d&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="Vim"></category></entry><entry><title>Calculate with command-line tool bc</title><link href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="alternate"></link><updated>2012-04-25T23:57:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2012-04-25:posts/2012/04/25/calculate-with-command-line-tool-bc/</id><summary type="html">&lt;p&gt;Basic usage&lt;/p&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Vim"></category></entry><entry><title>Calculate with command-line tool bc</title><link href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="alternate"></link><updated>2012-04-25T23:57:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2012-04-25:posts/2012/04/25/calculate-with-command-line-tool-bc/</id><summary type="html">&lt;p&gt;Basic usage&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;expr&amp;#39;&lt;/span&gt; | bc
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -512,7 +773,37 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
 &lt;p&gt;Hex to Dec&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;ibase=16;obase=A;FF&amp;#39;&lt;/span&gt; | bc
 255
-&lt;/pre&gt;&lt;/div&gt;</summary><category term="Cli"></category></entry><entry><title>Python: list assigning(copying)</title><link href="http://blog.lance.tw/posts/2011/12/17/python-list-assigningcopying/" rel="alternate"></link><updated>2011-12-17T11:49:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2011-12-17:posts/2011/12/17/python-list-assigningcopying/</id><summary type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="Cli"></category></entry><entry><title>Python: list assigning(copying)</title><link href="http://blog.lance.tw/posts/2011/12/17/python-list-assigningcopying/" rel="alternate"></link><updated>2011-12-17T11:49:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2011-12-17:posts/2011/12/17/python-list-assigningcopying/</id><summary type="html">&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
 &lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;
 &lt;span class="gp"&gt;&amp;gt;&amp;gt;&amp;gt; &lt;/span&gt;&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
@@ -536,7 +827,7 @@ commit到一個臨時的branch上，等到問題解決了，在soft reset回來�
 
 &lt;p&gt;module copy中又有copy與deepcopy，兩者的差別要再研究研究&lt;/p&gt;
 &lt;p&gt;Reference:&lt;br /&gt;
-&lt;a href="http://docs.python.org/library/copy.html"&gt;python module copy&lt;/a&gt;&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>bash wrapping 位置錯誤</title><link href="http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/" rel="alternate"></link><updated>2011-12-07T10:41:00+08:00</updated><author><name>Lance</name></author><id>tag:blog.lance.tw,2011-12-07:posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/</id><summary type="html">&lt;p&gt;在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用&lt;/p&gt;
+&lt;a href="http://docs.python.org/library/copy.html"&gt;python module copy&lt;/a&gt;&lt;/p&gt;</summary><category term="Python"></category></entry><entry><title>bash wrapping 位置錯誤</title><link href="http://blog.lance.tw/posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/" rel="alternate"></link><updated>2011-12-07T10:41:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2011-12-07:posts/2011/12/07/bash-wrapping-wei-zhi-cuo-wu/</id><summary type="html">&lt;p&gt;在bash環境下，紀錄terminal寬度的變數叫做COLUMNS，可以用&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="nv"&gt;$COLUMNS&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
@@ -553,4 +844,34 @@ COLUMNS，可以把他加在 ~/.bashrc 裡面&lt;/p&gt;
 
 &lt;p&gt;至於效果如何，需要再觀察看看囉&lt;/p&gt;
 &lt;p&gt;Reference:&lt;br /&gt;
-&lt;a href="http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin"&gt;Bash Reference Manual&lt;/a&gt;&lt;/p&gt;</summary><category term="Bash"></category></entry></feed>
+&lt;a href="http://www.gnu.org/software/bash/manual/bashref.html#The-Shopt-Builtin"&gt;Bash Reference Manual&lt;/a&gt;&lt;/p&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="Bash"></category></entry></feed>
