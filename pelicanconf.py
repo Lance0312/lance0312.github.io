@@ -38,6 +38,7 @@ THEME = './themes/gum/'
 GITHUB_URL = 'https://github.com/Lance0312'
 TWITTER_URL = 'https://twitter.com/Lance0312'
 DISQUS_SITENAME = 'bloglancetw'
+ADDTHIS_PROFILE = 'ra-53d870897d773f31'
 
 MENUITEMS = [('Archives','/archives.html'),]
 
