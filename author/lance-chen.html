@@ -64,6 +64,33 @@
         <div class="eleven columns">
 		         <ol id="post-list">
 				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/" rel="bookmark" title="Permalink to From ext4 mdadm raid5 to btrfs raid10">From ext4 mdadm raid5 to btrfs raid10</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2014-08-08T00:00:00"> Fri 08 August 2014 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>最近把一台 linux distro mirror server 搬到新的機器上，就順勢把原先
+ext4 + mdadm raid5 的組合換成了 btrfs raid10。原先在考慮是否要換成 zfs，但在看
+到 <a href="http://www.phoronix.com/scan.php?page=news_item&amp;px=MTY0NDk">openSUSE</a>、<a href="http://www.phoronix.com/scan.php?page=news_item&amp;px=MTYzNjA">Facebook</a>、<a href="https://coreos.com/blog/new-filesystem-btrfs-cloud-config/">CoreOS</a> 都相繼轉向 btrfs 後，我決定放手一
+搏。由於 <a href="http://marc.merlins.org/perso/btrfs/post_2014-03-23_Btrfs-Raid5-Status.html">btrfs raid5 和 raid6 還在 experimental 階段</a>，所以現在先用
+raid10，btrfs 的其中一個特點在於，等到 raid5 穩定後，可以用
+<a href="https://btrfs.wiki.kernel.org/index.php/Balance_Filters">Balance Filters</a> 將 raid10 無痛轉換成 raid5。以下是新舊硬體的差異，以及使用
+<code>dd ...</code></p> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/" rel="bookmark" title="Permalink to From ext4 mdadm raid5 to btrfs raid10">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/linux.html">Linux</a>
+											<a class="danger label" href="http://blog.lance.tw/tag/filesystem.html">Filesystem</a>
+											<a class="danger label" href="http://blog.lance.tw/tag/storage.html">Storage</a>
+								</div>
+
+
+
+				        </article></li>
+				        <li><article class="hentry">
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="bookmark" title="Permalink to 來複習一下資料結構 - Priority Queue">來複習一下資料結構 - Priority Queue</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2014-07-26T18:30:00"> Sat 26 July 2014 </abbr>
@@ -215,43 +242,6 @@ list.</p>
 
 
 				        </article></li>
-				        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Manually Install FreeBSD 9.0 Release on GPT and Gmirror</a></h2> </header>
-				                <footer class="post-info">
-				                    <abbr class="published" title="2012-08-22T17:50:00"> Wed 22 August 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <p>新學期、新組別、新測試機</p>
-<p>FreeBSD branch: <a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso">FreeBSD 9.0 Release</a></p>
-<h2>準備安裝環境</h2>
-<p>依照你的環境，把installation media開起來，第一個畫面應該會像這樣
-<img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /></p>
-<p>因為標題寫"manually"，所以選擇<strong>Shell</strong>，接下來一切就靠自己了</p>
-<h2>Preparing disk</h2>
-<p>我們使用GPT(<a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table</a>) scheme，GPT相較於MBR有以下兩個好處，</p>
-<ol>
-<li>可使用於大於2TB的硬碟</li>
-<li>不再受限於四個Primary partitions</li>
-</ol>
-<h3>Create partition table</h3>
-<div class="highlight"><pre><span class="c"># 查看有沒有存在的partition table，應該要是空白的</span>
-<span class="nv">$ </span>gpart show
-
-<span class="c"># 產生gpt scheme</span>
-<span class="nv">$ </span>gpart create -s gpt da0
-<span class="nv">$ </span>gpart create -s gpt da1 ...</pre></div> </div><!-- /.entry-content -->
-
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Read more <i class="icon-arrow-right"></i></a></div>
-
-
-
-								<div class="row tag-row">
-										<span>Tagged as : </span>
-											<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
-								</div>
-
-
-
-				        </article></li>
 				</ol><!-- /#posts-list -->
 
         </div><!-- /.eleven.columns -->
@@ -261,16 +251,19 @@ list.</p>
 <h4>Tags</h4>
 	<ul>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/storage.html">Storage</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/data-structure.html">Data structure</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/linux.html">Linux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/filesystem.html">Filesystem</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
 </ul>
 
 

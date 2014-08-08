@@ -1,5 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/lance-chen.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2014-07-26T18:30:00+08:00</updated><entry><title>來複習一下資料結構 - Priority Queue</title><link href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="alternate"></link><updated>2014-07-26T18:30:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2014-07-26:posts/2014/07/26/basic-data-structure-priority-queue/</id><summary type="html">&lt;p&gt;Priority queue 有別於一般的 queue，每一個 element 都額外帶有優先值，愈優先的
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Lance's blog</title><link href="http://blog.lance.tw/" rel="alternate"></link><link href="http://blog.lance.tw/feeds/lance-chen.atom.xml" rel="self"></link><id>http://blog.lance.tw/</id><updated>2014-08-08T00:00:00+08:00</updated><entry><title>From ext4 mdadm raid5 to btrfs raid10</title><link href="http://blog.lance.tw/posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/" rel="alternate"></link><updated>2014-08-08T00:00:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2014-08-08:posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/</id><summary type="html">&lt;p&gt;最近把一台 linux distro mirror server 搬到新的機器上，就順勢把原先
+ext4 + mdadm raid5 的組合換成了 btrfs raid10。原先在考慮是否要換成 zfs，但在看
+到 &lt;a href="http://www.phoronix.com/scan.php?page=news_item&amp;amp;px=MTY0NDk"&gt;openSUSE&lt;/a&gt;、&lt;a href="http://www.phoronix.com/scan.php?page=news_item&amp;amp;px=MTYzNjA"&gt;Facebook&lt;/a&gt;、&lt;a href="https://coreos.com/blog/new-filesystem-btrfs-cloud-config/"&gt;CoreOS&lt;/a&gt; 都相繼轉向 btrfs 後，我決定放手一
+搏。由於 &lt;a href="http://marc.merlins.org/perso/btrfs/post_2014-03-23_Btrfs-Raid5-Status.html"&gt;btrfs raid5 和 raid6 還在 experimental 階段&lt;/a&gt;，所以現在先用
+raid10，btrfs 的其中一個特點在於，等到 raid5 穩定後，可以用
+&lt;a href="https://btrfs.wiki.kernel.org/index.php/Balance_Filters"&gt;Balance Filters&lt;/a&gt; 將 raid10 無痛轉換成 raid5。以下是新舊硬體的差異，以及使用
+&lt;code&gt;dd&lt;/code&gt; 作寫入速度的測試。&lt;/p&gt;
+&lt;h3&gt;System Specification&lt;/h3&gt;
+&lt;table class="table"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Old server&lt;/th&gt;
+      &lt;th&gt;New server&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Filesystem&lt;/td&gt;
+      &lt;td&gt;ext4 + mdadm&lt;/td&gt;
+      &lt;td&gt;btrfs&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;RAID level&lt;/td&gt;
+      &lt;td&gt;raid5&lt;/td&gt;
+      &lt;td&gt;raid10&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HDD&lt;/td&gt;
+      &lt;td&gt;Seagate SV35.6 Series ST3000VX000 3TB * 4&lt;/td&gt;
+      &lt;td&gt;Seagate Constellation ES.3 ST4000NM0033 4TB * 6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;RAM&lt;/td&gt;
+      &lt;td&gt;16G&lt;/td&gt;
+      &lt;td&gt;32G&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3&gt;Write with dd&lt;/h3&gt;
+&lt;h4&gt;Old server&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;time &lt;/span&gt;sh -c &lt;span class="s2"&gt;&amp;quot;dd if=/dev/zero of=testdd bs=4k count=2000000 &amp;amp;&amp;amp; sync&amp;quot;&lt;/span&gt;
+2000000+0 records in
+2000000+0 records out
+8192000000 bytes &lt;span class="o"&gt;(&lt;/span&gt;8.2 GB&lt;span class="o"&gt;)&lt;/span&gt; copied, 34.5464 s, 237 MB/s
+
+real    0m51.607s
+user    0m0.360s
+sys     0m10.463s
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;New server&lt;/h4&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;time &lt;/span&gt;sh -c &lt;span class="s2"&gt;&amp;quot;dd if=/dev/zero of=testdd bs=4k count=2000000 &amp;amp;&amp;amp; sync&amp;quot;&lt;/span&gt;
+2000000+0 records in
+2000000+0 records out
+8192000000 bytes &lt;span class="o"&gt;(&lt;/span&gt;8.2 GB&lt;span class="o"&gt;)&lt;/span&gt; copied, 11.1265 s, 736 MB/s
+
+real    0m27.279s
+user    0m0.233s
+sys     0m10.093s
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4&gt;同場加映 - Intel 530 180G SSD with ext4&lt;/h4&gt;
+&lt;p&gt;有機會再來試試 SSD + btrfs 的組合&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;time &lt;/span&gt;sh -c &lt;span class="s2"&gt;&amp;quot;dd if=/dev/zero of=testdd bs=4k count=2000000 &amp;amp;&amp;amp; sync&amp;quot;&lt;/span&gt;
+2000000+0 records in
+2000000+0 records out
+8192000000 bytes &lt;span class="o"&gt;(&lt;/span&gt;8.2 GB&lt;span class="o"&gt;)&lt;/span&gt; copied, 18.9957 s, 431 MB/s
+
+real    0m19.542s
+user    0m0.387s
+sys     0m8.030s
+&lt;/pre&gt;&lt;/div&gt;&lt;script type= "text/javascript"&gt;
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+&lt;/script&gt;
+</summary><category term="Linux"></category><category term="Filesystem"></category><category term="Storage"></category></entry><entry><title>來複習一下資料結構 - Priority Queue</title><link href="http://blog.lance.tw/posts/2014/07/26/basic-data-structure-priority-queue/" rel="alternate"></link><updated>2014-07-26T18:30:00+08:00</updated><author><name>Lance Chen</name></author><id>tag:blog.lance.tw,2014-07-26:posts/2014/07/26/basic-data-structure-priority-queue/</id><summary type="html">&lt;p&gt;Priority queue 有別於一般的 queue，每一個 element 都額外帶有優先值，愈優先的
 (一般來說是優先值愈低的) 放在愈前面。Priority queue 是一個 Abstract Data Type，
 有許多不同的實作方法，以 array 或 linked list 實作的時間複雜度如下表，&lt;/p&gt;
 &lt;table class="table"&gt;

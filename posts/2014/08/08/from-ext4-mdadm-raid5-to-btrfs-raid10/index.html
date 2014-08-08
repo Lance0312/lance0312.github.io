@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-        <title>Attach mails as attachments in Mutt</title>
+        <title>From ext4 mdadm raid5 to btrfs raid10</title>
         <meta charset="utf-8" />
         <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
         <link href="http://blog.lance.tw/feeds/posts.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Categories Atom Feed" />
@@ -63,36 +63,125 @@
 
             <header>
               <h2 class="entry-title">
-                <a href="http://blog.lance.tw/posts/2013/08/24/attach-mails-as-attachments-in-mutt/" rel="bookmark"
-                   title="Permalink to Attach mails as attachments in Mutt">Attach mails as attachments in Mutt</a></h2>
+                <a href="http://blog.lance.tw/posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/" rel="bookmark"
+                   title="Permalink to From ext4 mdadm raid5 to btrfs raid10">From ext4 mdadm raid5 to btrfs raid10</a></h2>
            
             </header>
             <footer class="post-info">
-              <abbr class="published" title="2013-08-24T16:04:00">
-                Sat 24 August 2013
+              <abbr class="published" title="2014-08-08T00:00:00">
+                Fri 08 August 2014
               </abbr>
               <address class="vcard author">
                 By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a>
               </address>
             </footer><!-- /.post-info -->
             <div class="entry-content">
-              <p>We all know how to attach a file as an attachment in Mutt. Just press <code>a</code> in
-<a href="http://dev.mutt.org/trac/wiki/MuttGuide/Actions#primarymodes" title="MuttGuide/Actions">attach mode</a>, and either type the file name or press <code>?</code> to open up a file
-list.</p>
-<p>But what to do when it comes to attaching a mail or even mails? For a single
-mail, just forward it. For multiple mails, here's what I found. Mutt has a
-command <code>attach-message</code>, which is default bind to <code>A</code>. The help message says,</p>
-<div class="highlight"><pre><span class="n">A</span>      <span class="n">attach</span><span class="o">-</span><span class="n">message</span>                  <span class="n">attach</span> <span class="n">message</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">to</span> <span class="n">this</span> <span class="n">message</span>
+              <p>最近把一台 linux distro mirror server 搬到新的機器上，就順勢把原先
+ext4 + mdadm raid5 的組合換成了 btrfs raid10。原先在考慮是否要換成 zfs，但在看
+到 <a href="http://www.phoronix.com/scan.php?page=news_item&amp;px=MTY0NDk">openSUSE</a>、<a href="http://www.phoronix.com/scan.php?page=news_item&amp;px=MTYzNjA">Facebook</a>、<a href="https://coreos.com/blog/new-filesystem-btrfs-cloud-config/">CoreOS</a> 都相繼轉向 btrfs 後，我決定放手一
+搏。由於 <a href="http://marc.merlins.org/perso/btrfs/post_2014-03-23_Btrfs-Raid5-Status.html">btrfs raid5 和 raid6 還在 experimental 階段</a>，所以現在先用
+raid10，btrfs 的其中一個特點在於，等到 raid5 穩定後，可以用
+<a href="https://btrfs.wiki.kernel.org/index.php/Balance_Filters">Balance Filters</a> 將 raid10 無痛轉換成 raid5。以下是新舊硬體的差異，以及使用
+<code>dd</code> 作寫入速度的測試。</p>
+<h3>System Specification</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Old server</th>
+      <th>New server</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Filesystem</td>
+      <td>ext4 + mdadm</td>
+      <td>btrfs</td>
+    </tr>
+    <tr>
+      <td>RAID level</td>
+      <td>raid5</td>
+      <td>raid10</td>
+    </tr>
+    <tr>
+      <td>HDD</td>
+      <td>Seagate SV35.6 Series ST3000VX000 3TB * 4</td>
+      <td>Seagate Constellation ES.3 ST4000NM0033 4TB * 6</td>
+    </tr>
+    <tr>
+      <td>RAM</td>
+      <td>16G</td>
+      <td>32G</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Write with dd</h3>
+<h4>Old server</h4>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">time </span>sh -c <span class="s2">&quot;dd if=/dev/zero of=testdd bs=4k count=2000000 &amp;&amp; sync&quot;</span>
+2000000+0 records in
+2000000+0 records out
+8192000000 bytes <span class="o">(</span>8.2 GB<span class="o">)</span> copied, 34.5464 s, 237 MB/s
+
+real    0m51.607s
+user    0m0.360s
+sys     0m10.463s
 </pre></div>
 
 
-<p>It is a little bit confusing after pressing <code>A</code> and choose a mail box to open
-up. You just need to press <code>t</code> to tag any messages you want to attach and press
-<code>q</code> to return to the attach mode. Then you will see those messages appear in the
-attachment list.</p>
-<p>Moreover, you can press <code>^D</code> on a message to toggle it between inline and attachment.</p>
-<div class="highlight"><pre><span class="o">^</span><span class="n">D</span>     <span class="n">toggle</span><span class="o">-</span><span class="n">disposition</span>              <span class="n">toggle</span> <span class="n">disposition</span> <span class="n">between</span> <span class="kr">inline</span><span class="o">/</span><span class="n">attachment</span>
+<h4>New server</h4>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">time </span>sh -c <span class="s2">&quot;dd if=/dev/zero of=testdd bs=4k count=2000000 &amp;&amp; sync&quot;</span>
+2000000+0 records in
+2000000+0 records out
+8192000000 bytes <span class="o">(</span>8.2 GB<span class="o">)</span> copied, 11.1265 s, 736 MB/s
+
+real    0m27.279s
+user    0m0.233s
+sys     0m10.093s
 </pre></div>
+
+
+<h4>同場加映 - Intel 530 180G SSD with ext4</h4>
+<p>有機會再來試試 SSD + btrfs 的組合</p>
+<div class="highlight"><pre><span class="nv">$ </span><span class="nb">time </span>sh -c <span class="s2">&quot;dd if=/dev/zero of=testdd bs=4k count=2000000 &amp;&amp; sync&quot;</span>
+2000000+0 records in
+2000000+0 records out
+8192000000 bytes <span class="o">(</span>8.2 GB<span class="o">)</span> copied, 18.9957 s, 431 MB/s
+
+real    0m19.542s
+user    0m0.387s
+sys     0m8.030s
+</pre></div><script type= "text/javascript">
+    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+        var mathjaxscript = document.createElement('script');
+        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+        mathjaxscript.type = 'text/javascript';
+        mathjaxscript.src = 'https:' == document.location.protocol
+                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
+                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+            "MathJax.Hub.Config({" +
+            "    config: ['MMLorHTML.js']," +
+            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+            "    displayAlign: 'center'," +
+            "    displayIndent: '0em'," +
+            "    showMathMenu: true," +
+            "    tex2jax: { " +
+            "        inlineMath: [ ['$','$'] ], " +
+            "        displayMath: [ ['$$','$$'] ]," +
+            "        processEscapes: true," +
+            "        preview: 'TeX'," +
+            "    }, " +
+            "    'HTML-CSS': { " +
+            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+            "    } " +
+            "}); ";
+        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+    }
+</script>
+
             </div><!-- /.entry-content -->
             <hr>
             <div class="addthis_native_toolbox"></div>
@@ -100,7 +189,7 @@ attachment list.</p>
               <h3>Comments</h3>
               <div id="disqus_thread"></div>
               <script type="text/javascript">
-                var disqus_identifier = "posts/2013/08/24/attach-mails-as-attachments-in-mutt/";
+                var disqus_identifier = "posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/";
                 (function() {
                 var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
                 dsq.src = 'http://bloglancetw.disqus.com/embed.js';

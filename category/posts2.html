@@ -65,6 +65,43 @@
         <div class="eleven columns">
 		         <ol id="post-list">
 				        <li><article class="hentry">
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Manually Install FreeBSD 9.0 Release on GPT and Gmirror</a></h2> </header>
+				                <footer class="post-info">
+				                    <abbr class="published" title="2012-08-22T17:50:00"> Wed 22 August 2012 </abbr>
+<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
+				                <div class="entry-content"> <p>新學期、新組別、新測試機</p>
+<p>FreeBSD branch: <a href="http://ftp.tw.freebsd.org/pub/releases/ISO-IMAGES/9.0/FreeBSD-9.0-RELEASE-amd64-disc1.iso">FreeBSD 9.0 Release</a></p>
+<h2>準備安裝環境</h2>
+<p>依照你的環境，把installation media開起來，第一個畫面應該會像這樣
+<img alt="" src="http://www.freebsd.org/doc/handbook/bsdinstall/bsdinstall-choose-mode.png" /></p>
+<p>因為標題寫"manually"，所以選擇<strong>Shell</strong>，接下來一切就靠自己了</p>
+<h2>Preparing disk</h2>
+<p>我們使用GPT(<a href="http://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table</a>) scheme，GPT相較於MBR有以下兩個好處，</p>
+<ol>
+<li>可使用於大於2TB的硬碟</li>
+<li>不再受限於四個Primary partitions</li>
+</ol>
+<h3>Create partition table</h3>
+<div class="highlight"><pre><span class="c"># 查看有沒有存在的partition table，應該要是空白的</span>
+<span class="nv">$ </span>gpart show
+
+<span class="c"># 產生gpt scheme</span>
+<span class="nv">$ </span>gpart create -s gpt da0
+<span class="nv">$ </span>gpart create -s gpt da1 ...</pre></div> </div><!-- /.entry-content -->
+
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/08/22/manually-install-freebsd-90-release-on-gpt-and-gmirror/" rel="bookmark" title="Permalink to Manually Install FreeBSD 9.0 Release on GPT and Gmirror">Read more <i class="icon-arrow-right"></i></a></div>
+
+
+
+								<div class="row tag-row">
+										<span>Tagged as : </span>
+											<a class="danger label" href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a>
+								</div>
+
+
+
+				        </article></li>
+				        <li><article class="hentry">
 				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/08/04/git-smart-http-with-ldap-auth/" rel="bookmark" title="Permalink to Git: Smart Http with LDAP Auth">Git: Smart Http with LDAP Auth</a></h2> </header>
 				                <footer class="post-info">
 				                    <abbr class="published" title="2012-08-04T02:28:00"> Sat 04 August 2012 </abbr>
@@ -183,69 +220,6 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 
 
 				        </article></li>
-				        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Calculate with command-line tool bc</a></h2> </header>
-				                <footer class="post-info">
-				                    <abbr class="published" title="2012-04-25T23:57:00"> Wed 25 April 2012 </abbr>
-<address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <p>Basic usage</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;expr&#39;</span> | bc
-</pre></div>
-
-
-<p>Hex to Dec</p>
-<div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;ibase=16;obase=A;FF&#39;</span> | bc
-255
-</pre></div><script type= "text/javascript">
-    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-        var mathjaxscript = document.createElement('script');
-        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-        mathjaxscript.type = 'text/javascript';
-        mathjaxscript.src = 'https:' == document.location.protocol
-                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML ...</script><script type= "text/javascript">
-    if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-        var mathjaxscript = document.createElement('script');
-        mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-        mathjaxscript.type = 'text/javascript';
-        mathjaxscript.src = 'https:' == document.location.protocol
-                ? 'https://c328740.ssl.cf1.rackcdn.com/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'
-                : 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-        mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-            "MathJax.Hub.Config({" +
-            "    config: ['MMLorHTML.js']," +
-            "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-            "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-            "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-            "    displayAlign: 'center'," +
-            "    displayIndent: '0em'," +
-            "    showMathMenu: true," +
-            "    tex2jax: { " +
-            "        inlineMath: [ ['$','$'] ], " +
-            "        displayMath: [ ['$$','$$'] ]," +
-            "        processEscapes: true," +
-            "        preview: 'TeX'," +
-            "    }, " +
-            "    'HTML-CSS': { " +
-            "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
-            "    } " +
-            "}); ";
-        (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-    }
-</script>
- </div><!-- /.entry-content -->
-
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2012/04/25/calculate-with-command-line-tool-bc/" rel="bookmark" title="Permalink to Calculate with command-line tool bc">Read more <i class="icon-arrow-right"></i></a></div>
-
-
-
-								<div class="row tag-row">
-										<span>Tagged as : </span>
-											<a class="danger label" href="http://blog.lance.tw/tag/cli.html">Cli</a>
-								</div>
-
-
-
-				        </article></li>
 				</ol><!-- /#posts-list -->
 
         </div><!-- /.eleven.columns -->
@@ -255,16 +229,19 @@ but want ...</pre></div> </div><!-- /.entry-content -->
 <h4>Tags</h4>
 	<ul>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/freebsd.html">FreeBSD</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/vim.html">Vim</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
-	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
-	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/cli.html">Cli</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/storage.html">Storage</a></li>
+	    <li class="tag-1"><a href="http://blog.lance.tw/tag/python.html">Python</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/mutt.html">Mutt</a></li>
 	    <li class="tag-1"><a href="http://blog.lance.tw/tag/git.html">Git</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/django.html">Django</a></li>
 	    <li class="tag-4"><a href="http://blog.lance.tw/tag/data-structure.html">Data structure</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/bash.html">Bash</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/linux.html">Linux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/filesystem.html">Filesystem</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/archlinux.html">Archlinux</a></li>
+	    <li class="tag-4"><a href="http://blog.lance.tw/tag/sentry.html">Sentry</a></li>
 </ul>
 
 

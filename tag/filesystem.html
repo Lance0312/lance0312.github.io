@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-        <title>Lance's blog - Sentry</title>
+        <title>Lance's blog - Filesystem</title>
         <meta charset="utf-8" />
         <link href="http://blog.lance.tw/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Lance's blog Full Atom Feed" />
 
@@ -64,25 +64,27 @@
         <div class="eleven columns">
 		         <ol id="post-list">
 				        <li><article class="hentry">
-				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2014/02/19/ldap-authentication-for-sentry/" rel="bookmark" title="Permalink to LDAP Authentication for Sentry">LDAP Authentication for Sentry</a></h2> </header>
+				                <header> <h2 class="entry-title"><a href="http://blog.lance.tw/posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/" rel="bookmark" title="Permalink to From ext4 mdadm raid5 to btrfs raid10">From ext4 mdadm raid5 to btrfs raid10</a></h2> </header>
 				                <footer class="post-info">
-				                    <abbr class="published" title="2014-02-19T18:30:00"> Wed 19 February 2014 </abbr>
+				                    <abbr class="published" title="2014-08-08T00:00:00"> Fri 08 August 2014 </abbr>
 <address class="vcard author">By <a class="url fn" href="http://blog.lance.tw/author/lance-chen.html">Lance Chen</a></address>				                </footer><!-- /.post-info -->
-				                <div class="entry-content"> <p><a href="https://getsentry.com">Sentry</a> is an awesome error logging platform for
-various language platforms and web frameworks. And it also supports several
-social authentication backends, including Twitter, Facebook, Google, Github,
-Trello and Bitbucket. However, if you are trying to set up Sentry for a
-company or an organization, you would probably want to ...</p> </div><!-- /.entry-content -->
+				                <div class="entry-content"> <p>最近把一台 linux distro mirror server 搬到新的機器上，就順勢把原先
+ext4 + mdadm raid5 的組合換成了 btrfs raid10。原先在考慮是否要換成 zfs，但在看
+到 <a href="http://www.phoronix.com/scan.php?page=news_item&amp;px=MTY0NDk">openSUSE</a>、<a href="http://www.phoronix.com/scan.php?page=news_item&amp;px=MTYzNjA">Facebook</a>、<a href="https://coreos.com/blog/new-filesystem-btrfs-cloud-config/">CoreOS</a> 都相繼轉向 btrfs 後，我決定放手一
+搏。由於 <a href="http://marc.merlins.org/perso/btrfs/post_2014-03-23_Btrfs-Raid5-Status.html">btrfs raid5 和 raid6 還在 experimental 階段</a>，所以現在先用
+raid10，btrfs 的其中一個特點在於，等到 raid5 穩定後，可以用
+<a href="https://btrfs.wiki.kernel.org/index.php/Balance_Filters">Balance Filters</a> 將 raid10 無痛轉換成 raid5。以下是新舊硬體的差異，以及使用
+<code>dd ...</code></p> </div><!-- /.entry-content -->
 
-								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2014/02/19/ldap-authentication-for-sentry/" rel="bookmark" title="Permalink to LDAP Authentication for Sentry">Read more <i class="icon-arrow-right"></i></a></div>
+								<div class="medium primary btn"><a href="http://blog.lance.tw/posts/2014/08/08/from-ext4-mdadm-raid5-to-btrfs-raid10/" rel="bookmark" title="Permalink to From ext4 mdadm raid5 to btrfs raid10">Read more <i class="icon-arrow-right"></i></a></div>
 
 
 
 								<div class="row tag-row">
 										<span>Tagged as : </span>
-											<a class="danger label" href="http://blog.lance.tw/tag/python.html">Python</a>
-											<a class="danger label" href="http://blog.lance.tw/tag/django.html">Django</a>
-											<a class="danger label" href="http://blog.lance.tw/tag/sentry.html">Sentry</a>
+											<a class="danger label" href="http://blog.lance.tw/tag/linux.html">Linux</a>
+											<a class="danger label" href="http://blog.lance.tw/tag/filesystem.html">Filesystem</a>
+											<a class="danger label" href="http://blog.lance.tw/tag/storage.html">Storage</a>
 								</div>
 
 
